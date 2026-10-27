@@ -1049,7 +1049,7 @@ if nav_selection == "Overview":
                 })
                 
         # Render clean HTML financial table
-        html_rows = ""
+        html_rows = []
         for r in comp_rows:
             active_cls = ' class="active-row"' if r['is_active'] else ''
             p_sign = "+" if r['period_ret'] >= 0 else ""
@@ -1063,36 +1063,31 @@ if nav_selection == "Overview":
             elif r['ticker'] == BENCHMARK:
                 ticker_display += ' <span class="badge-neutral" style="margin-left: 4px;">Benchmark</span>'
                 
-            html_rows += f"""
-            <tr{active_cls}>
-                <td>{ticker_display}</td>
-                <td style="text-align: right; font-variant-numeric: tabular-nums;">${r['latest_price']:,.2f}</td>
-                <td style="text-align: right;"><span class="{p_cls}">{p_sign}{r['period_ret']:.2f}%</span></td>
-                <td style="text-align: right;"><span class="{d_cls}">{d_sign}{r['avg_daily_ret']:.3f}%</span></td>
-                <td style="text-align: right; font-variant-numeric: tabular-nums;">{r['ann_vol']:.2f}%</td>
-                <td style="text-align: right; font-variant-numeric: tabular-nums;">{r['sharpe']:.2f}</td>
-            </tr>
-            """
+            row_html = (
+                f'<tr{active_cls}>'
+                f'<td>{ticker_display}</td>'
+                f'<td style="text-align: right; font-variant-numeric: tabular-nums;">${r["latest_price"]:,.2f}</td>'
+                f'<td style="text-align: right;"><span class="{p_cls}">{p_sign}{r["period_ret"]:.2f}%</span></td>'
+                f'<td style="text-align: right;"><span class="{d_cls}">{d_sign}{r["avg_daily_ret"]:.3f}%</span></td>'
+                f'<td style="text-align: right; font-variant-numeric: tabular-nums;">{r["ann_vol"]:.2f}%</td>'
+                f'<td style="text-align: right; font-variant-numeric: tabular-nums;">{r["sharpe"]:.2f}</td>'
+                f'</tr>'
+            )
+            html_rows.append(row_html)
             
-        st.markdown(f"""
-        <div class="table-container">
-            <table class="fin-table">
-                <thead>
-                    <tr>
-                        <th>Asset</th>
-                        <th style="text-align: right;">Latest Close</th>
-                        <th style="text-align: right;">Period Return</th>
-                        <th style="text-align: right;">Avg Daily Return</th>
-                        <th style="text-align: right;">Annualized Volatility</th>
-                        <th style="text-align: right;">Sharpe Ratio (Rf=0%)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {html_rows}
-                </tbody>
-            </table>
-        </div>
-        """, unsafe_allow_html=True)
+        table_html = (
+            '<div class="table-container">'
+            '<table class="fin-table">'
+            '<thead><tr>'
+            '<th>Asset</th>'
+            '<th style="text-align: right;">Latest Close</th>'
+            '<th style="text-align: right;">Period Return</th>'
+            '<th style="text-align: right;">Avg Daily Return</th>'
+            '<th style="text-align: right;">Annualized Volatility</th>'
+            '<th style="text-align: right;">Sharpe Ratio (Rf=0%)</th>'
+            f'</tr></thead><tbody>{"".join(html_rows)}</tbody></table></div>'
+        )
+        st.markdown(table_html, unsafe_allow_html=True)
         
         st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
         
@@ -1131,13 +1126,13 @@ if nav_selection == "Overview":
             )
             
         obs_html = "".join([f'<div class="observation-item"><span class="observation-bullet">•</span><div>{item}</div></div>' for item in obs_list[:3]])
-        
-        st.markdown(f"""
-        <div class="observation-card">
-            <div class="observation-title">📌 Key Analytical Observations</div>
-            {obs_html}
-        </div>
-        """, unsafe_allow_html=True)
+        obs_card = (
+            '<div class="observation-card">'
+            '<div class="observation-title">📌 Key Analytical Observations</div>'
+            f'{obs_html}'
+            '</div>'
+        )
+        st.markdown(obs_card, unsafe_allow_html=True)
 
 
 # ==========================================
