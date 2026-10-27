@@ -1,7 +1,7 @@
 """
 Stock Market Return Statistical Analyzer
-A modern, light-mode financial analytics dashboard designed for academic research
-and quantitative market data exploration.
+A premium, financial-terminal-grade analytics and statistical dashboard
+designed for academic quantitative research and market analysis.
 """
 
 from pathlib import Path
@@ -17,14 +17,24 @@ import streamlit as st
 # ==========================================
 st.set_page_config(
     page_title="Stock Market Return Statistical Analyzer",
-    page_icon="📈",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # ==========================================
-# MODERN LIGHT-MODE STYLING
+# PREMIUM REFINED LIGHT THEME STYLING
 # ==========================================
+# Theme Tokens:
+# Background: #F6F8FC
+# Main cards: #FFFFFF
+# Primary text: #17243A
+# Secondary text: #69778C
+# Accent blue: #315CEB
+# Positive returns: #16856B
+# Negative returns: #D94F59
+# Borders: #E6EAF1
+
 st.markdown("""
 <style>
     /* Google Fonts */
@@ -32,7 +42,7 @@ st.markdown("""
     
     /* Global Styles */
     html, body, [class*="css"], .stApp {
-        background-color: #F7F8FA !important;
+        background-color: #F6F8FC !important;
         color: #17243A !important;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
@@ -40,25 +50,40 @@ st.markdown("""
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #17243A !important;
-        letter-spacing: -0.015em;
+        letter-spacing: -0.02em;
     }
-    
-    /* Clean Sidebar */
+
+    /* Refined Sidebar */
     section[data-testid="stSidebar"] {
         background-color: #FFFFFF !important;
-        border-right: 1px solid #E2E8F0 !important;
+        border-right: 1px solid #E6EAF1 !important;
     }
     
     section[data-testid="stSidebar"] .block-container {
-        padding-top: 1.8rem;
+        padding-top: 1.5rem;
         padding-bottom: 2rem;
     }
     
-    /* Project Brand Badge */
+    /* Project Brand Badge in Sidebar */
     .brand-container {
         padding-bottom: 14px;
         margin-bottom: 16px;
-        border-bottom: 1px solid #E2E8F0;
+        border-bottom: 1px solid #E6EAF1;
+    }
+    .brand-mark {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #315CEB;
+        background: rgba(49, 92, 235, 0.08);
+        border: 1px solid rgba(49, 92, 235, 0.18);
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-bottom: 6px;
     }
     .brand-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
@@ -69,32 +94,70 @@ st.markdown("""
         line-height: 1.3;
     }
     .brand-subtitle {
-        font-size: 0.76rem;
-        color: #64748B;
-        margin-top: 2px;
+        font-size: 0.78rem;
+        color: #69778C;
+        margin-top: 3px;
         font-weight: 500;
+    }
+    
+    /* Sidebar Navigation item styling */
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label {
+        padding: 6px 10px !important;
+        border-radius: 6px !important;
+        margin-bottom: 2px !important;
+        font-size: 0.88rem !important;
+        font-weight: 500 !important;
+        color: #17243A !important;
+        transition: all 0.12s ease-in-out !important;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {
+        background-color: #F6F8FC !important;
     }
     
     /* Main App Header */
     .app-header {
         background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 22px 26px;
-        margin-bottom: 20px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        border: 1px solid #E6EAF1;
+        border-radius: 10px;
+        padding: 20px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 1px 3px rgba(23, 36, 58, 0.03);
+    }
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .identity-mark {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #315CEB;
+        background: rgba(49, 92, 235, 0.08);
+        border: 1px solid rgba(49, 92, 235, 0.18);
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-bottom: 6px;
     }
     .app-title {
-        font-size: 1.7rem;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.65rem;
         font-weight: 800;
         color: #17243A;
         margin: 0;
         letter-spacing: -0.025em;
+        line-height: 1.25;
     }
     .app-subtitle {
         font-size: 0.92rem;
-        color: #64748B;
-        margin-top: 5px;
+        color: #69778C;
+        margin-top: 4px;
         margin-bottom: 0;
     }
     
@@ -103,6 +166,7 @@ st.markdown("""
         margin-bottom: 20px;
     }
     .page-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 1.45rem;
         font-weight: 700;
         color: #17243A;
@@ -111,28 +175,28 @@ st.markdown("""
     }
     .page-desc {
         font-size: 0.9rem;
-        color: #64748B;
+        color: #69778C;
         margin-bottom: 0;
     }
     
-    /* Metric Cards */
+    /* KPI Metric Cards */
     .metric-card {
         background: #FFFFFF;
-        border: 1px solid #E2E8F0;
+        border: 1px solid #E6EAF1;
         border-radius: 10px;
         padding: 16px 18px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 1px 3px rgba(23, 36, 58, 0.03);
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
     .metric-label {
-        color: #64748B;
-        font-size: 0.78rem;
+        color: #69778C;
+        font-size: 0.74rem;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.05em;
         margin-bottom: 6px;
     }
     .metric-value {
@@ -141,164 +205,269 @@ st.markdown("""
         font-size: 1.65rem;
         font-weight: 700;
         line-height: 1.2;
+        letter-spacing: -0.02em;
     }
     .metric-sub {
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         margin-top: 8px;
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 4px;
-        font-weight: 600;
-    }
-    .badge-pos {
-        color: #059669;
-        background-color: #ECFDF5;
-        padding: 2px 7px;
-        border-radius: 5px;
-        font-size: 0.78rem;
-    }
-    .badge-neg {
-        color: #DC2626;
-        background-color: #FEF2F2;
-        padding: 2px 7px;
-        border-radius: 5px;
-        font-size: 0.78rem;
-    }
-    .badge-neutral {
-        color: #475569;
-        background-color: #F1F5F9;
-        padding: 2px 7px;
-        border-radius: 5px;
-        font-size: 0.78rem;
+        flex-wrap: wrap;
+        gap: 5px;
     }
     
-    /* Card Container */
+    /* Badges */
+    .badge-pos {
+        color: #16856B;
+        background-color: #E8F5F1;
+        border: 1px solid #B2E2D4;
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.76rem;
+        font-weight: 600;
+    }
+    .badge-neg {
+        color: #D94F59;
+        background-color: #FDF0F1;
+        border: 1px solid #F5C2C6;
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.76rem;
+        font-weight: 600;
+    }
+    .badge-neutral {
+        color: #69778C;
+        background-color: #F1F4F9;
+        border: 1px solid #E6EAF1;
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.76rem;
+        font-weight: 500;
+    }
+    .badge-accent {
+        color: #315CEB;
+        background-color: rgba(49, 92, 235, 0.08);
+        border: 1px solid rgba(49, 92, 235, 0.2);
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.76rem;
+        font-weight: 600;
+    }
+    
+    /* Standard Content Cards */
     .content-card {
         background: #FFFFFF;
-        border: 1px solid #E2E8F0;
+        border: 1px solid #E6EAF1;
         border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-        margin-bottom: 20px;
+        padding: 18px 20px;
+        box-shadow: 0 1px 3px rgba(23, 36, 58, 0.02);
+        margin-bottom: 16px;
     }
     .card-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 1.05rem;
+        font-size: 0.98rem;
         font-weight: 700;
         color: #17243A;
         margin-bottom: 12px;
+        letter-spacing: -0.01em;
     }
     
-    /* Observation Box */
+    /* Key Observations Card */
     .observation-card {
         background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-left: 4px solid #3563E9;
+        border: 1px solid #E6EAF1;
+        border-left: 3.5px solid #315CEB;
         border-radius: 8px;
         padding: 16px 20px;
         margin-top: 14px;
         margin-bottom: 20px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 1px 3px rgba(23, 36, 58, 0.02);
     }
     .observation-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 0.92rem;
+        font-size: 0.88rem;
         font-weight: 700;
         color: #17243A;
-        margin-bottom: 4px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
-    .observation-text {
-        font-size: 0.88rem;
+    .observation-item {
+        font-size: 0.86rem;
         color: #475569;
         line-height: 1.55;
-        margin: 0;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+    }
+    .observation-bullet {
+        color: #315CEB;
+        font-weight: 700;
+        font-size: 0.9rem;
     }
     
-    /* Academic Disclaimer */
+    /* Academic Disclaimer Card */
     .disclaimer-card {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-left: 4px solid #F59E0B;
+        background: #FAFBFD;
+        border: 1px solid #E6EAF1;
+        border-left: 3.5px solid #F59E0B;
         border-radius: 8px;
         padding: 14px 18px;
         margin-top: 24px;
         color: #475569;
         font-size: 0.84rem;
-        line-height: 1.5;
+        line-height: 1.55;
     }
     
-    /* Subtle Tab & Control Styling */
+    /* Professional Comparison HTML Table */
+    .table-container {
+        background: #FFFFFF;
+        border: 1px solid #E6EAF1;
+        border-radius: 8px;
+        overflow-x: auto;
+        box-shadow: 0 1px 2px rgba(23, 36, 58, 0.02);
+    }
+    .fin-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.86rem;
+        text-align: left;
+    }
+    .fin-table th {
+        background-color: #FAFBFD;
+        color: #69778C;
+        font-weight: 600;
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 10px 14px;
+        border-bottom: 1px solid #E6EAF1;
+    }
+    .fin-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #F1F4F9;
+        color: #17243A;
+    }
+    .fin-table tr:last-child td {
+        border-bottom: none;
+    }
+    .fin-table tr:hover td {
+        background-color: #F8FAFD;
+    }
+    .fin-table tr.active-row td {
+        background-color: rgba(49, 92, 235, 0.04);
+        font-weight: 600;
+    }
+    
+    /* Streamlit Tabs Overrides */
     .stTabs [data-baseweb="tab-list"] {
         gap: 6px;
-        border-bottom: 1px solid #E2E8F0;
+        border-bottom: 1px solid #E6EAF1;
     }
     .stTabs [data-baseweb="tab"] {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-weight: 600;
         font-size: 0.88rem;
         padding: 8px 16px;
-        color: #64748B;
+        color: #69778C;
         border-radius: 6px 6px 0 0;
     }
     .stTabs [aria-selected="true"] {
-        color: #3563E9 !important;
-        border-bottom-color: #3563E9 !important;
+        color: #315CEB !important;
+        border-bottom-color: #315CEB !important;
     }
     
-    /* Clean Streamlit Dataframe Overrides */
+    /* Streamlit DataFrame Override */
     div[data-testid="stDataFrame"] {
-        border: 1px solid #E2E8F0;
+        border: 1px solid #E6EAF1;
         border-radius: 8px;
         overflow: hidden;
+    }
+    
+    /* Control Strip Container */
+    .control-strip {
+        background: #FFFFFF;
+        border: 1px solid #E6EAF1;
+        border-radius: 8px;
+        padding: 12px 18px;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
     }
 </style>
 """, unsafe_allow_html=True)
 
 
 # ==========================================
-# PLOTLY MODERN LIGHT THEME HELPER
+# PLOTLY REFINED LIGHT THEME BUILDER
 # ==========================================
-def create_clean_layout(title="", xaxis_title="", yaxis_title="", height=380, hovermode="x unified"):
-    """Creates a consistent, publication-ready light-mode layout for Plotly figures."""
-    return go.Layout(
+def create_clean_layout(
+    title="",
+    xaxis_title="",
+    yaxis_title="",
+    height=380,
+    hovermode="x unified",
+    show_legend=True
+):
+    """Creates a consistent, publication-ready light theme layout for Plotly figures."""
+    layout = go.Layout(
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+        font=dict(family="Inter, -apple-system, BlinkMacSystemFont, sans-serif", color="#17243A", size=11),
         title=dict(
             text=title,
             font=dict(family="Plus Jakarta Sans, sans-serif", size=13, color="#17243A", weight=700),
             x=0.01,
             y=0.96
-        ),
-        paper_bgcolor="#FFFFFF",
-        plot_bgcolor="#FFFFFF",
-        font=dict(family="Inter, sans-serif", color="#17243A", size=11),
+        ) if title else None,
         xaxis=dict(
-            title=dict(text=xaxis_title, font=dict(size=11, color="#64748B")),
-            gridcolor="#F1F5F9",
-            zerolinecolor="#E2E8F0",
-            tickfont=dict(color="#64748B", size=10),
+            title=dict(text=xaxis_title, font=dict(size=11, color="#69778C", weight=500)),
+            gridcolor="#F0F4F8",
+            gridwidth=1,
+            zerolinecolor="#E6EAF1",
+            zerolinewidth=1,
+            tickfont=dict(color="#69778C", size=10),
             showline=True,
-            linecolor="#E2E8F0"
+            linecolor="#E6EAF1",
+            linewidth=1
         ),
         yaxis=dict(
-            title=dict(text=yaxis_title, font=dict(size=11, color="#64748B")),
-            gridcolor="#F1F5F9",
-            zerolinecolor="#E2E8F0",
-            tickfont=dict(color="#64748B", size=10),
+            title=dict(text=yaxis_title, font=dict(size=11, color="#69778C", weight=500)),
+            gridcolor="#F0F4F8",
+            gridwidth=1,
+            zerolinecolor="#E6EAF1",
+            zerolinewidth=1,
+            tickfont=dict(color="#69778C", size=10),
             showline=True,
-            linecolor="#E2E8F0"
+            linecolor="#E6EAF1",
+            linewidth=1
         ),
-        margin=dict(l=45, r=20, t=42, b=38),
+        margin=dict(l=48, r=20, t=38 if title else 20, b=38),
         height=height,
         hovermode=hovermode,
+        hoverlabel=dict(
+            bgcolor="#17243A",
+            bordercolor="#17243A",
+            font=dict(color="#FFFFFF", family="Inter, sans-serif", size=11)
+        ),
+        showlegend=show_legend,
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="right",
             x=1,
-            font=dict(size=10, color="#64748B"),
-            bgcolor="rgba(255,255,255,0.8)"
-        )
+            font=dict(size=10.5, color="#69778C"),
+            bgcolor="rgba(255,255,255,0.85)",
+            bordercolor="#E6EAF1",
+            borderwidth=1
+        ) if show_legend else None
     )
+    return layout
 
 
 # ==========================================
@@ -337,7 +506,7 @@ def load_data():
             date_col = "Date" if "Date" in df.columns else df.columns[0]
             df[date_col] = pd.to_datetime(df[date_col])
             df = df.sort_values(date_col).reset_index(drop=True)
-            df.set_index(date_col, inplace=True)
+            df = df.set_index(date_col)
             data["close_prices"] = df
         except Exception as e:
             errors.append(f"Failed parsing stock_close_prices.csv: {e}")
@@ -352,7 +521,7 @@ def load_data():
             date_col = "index" if "index" in df.columns else ("Date" if "Date" in df.columns else df.columns[0])
             df[date_col] = pd.to_datetime(df[date_col])
             df = df.sort_values(date_col).reset_index(drop=True)
-            df.set_index(date_col, inplace=True)
+            df = df.set_index(date_col)
             data["returns"] = df
         except Exception as e:
             errors.append(f"Failed parsing daily_stock_returns.csv: {e}")
@@ -367,7 +536,7 @@ def load_data():
             if "Date" in df.columns:
                 df["Date"] = pd.to_datetime(df["Date"])
                 df = df.sort_values("Date").reset_index(drop=True)
-                df.set_index("Date", inplace=True)
+                df = df.set_index("Date")
             data["modeling_dataset"] = df
         except Exception as e:
             errors.append(f"Failed parsing modeling_dataset.csv: {e}")
@@ -470,34 +639,48 @@ DEFAULT_TICKER = "AAPL" if "AAPL" in stock_tickers else stock_tickers[0]
 
 
 # ==========================================
-# SIDEBAR CONTROLS & CLEAN NAVIGATION
+# SESSION STATE INITIALIZATION
+# ==========================================
+if "selected_stock" not in st.session_state:
+    st.session_state["selected_stock"] = DEFAULT_TICKER
+if "date_preset" not in st.session_state:
+    st.session_state["date_preset"] = "Full 5 Years"
+if "use_benchmark" not in st.session_state:
+    st.session_state["use_benchmark"] = BENCHMARK in df_returns.columns
+
+
+# ==========================================
+# SIDEBAR CONTROLS & REFINED NAVIGATION
 # ==========================================
 with st.sidebar:
     st.markdown("""
     <div class="brand-container">
-        <div class="brand-title">📈 Stock Return Analyzer</div>
-        <div class="brand-subtitle">Statistical & Predictive Dashboard</div>
+        <div class="brand-mark">FINANCIAL ANALYTICS</div>
+        <div class="brand-title">Stock Return Analyzer</div>
+        <div class="brand-subtitle">Academic Research Terminal</div>
     </div>
     """, unsafe_allow_html=True)
     
     # 1. Primary Equity Selection
-    selected_stock = st.selectbox(
+    sb_stock = st.selectbox(
         "Target Stock",
         options=stock_tickers,
-        index=stock_tickers.index(DEFAULT_TICKER) if DEFAULT_TICKER in stock_tickers else 0,
+        index=stock_tickers.index(st.session_state["selected_stock"]) if st.session_state["selected_stock"] in stock_tickers else 0,
         help="Select the equity asset to analyze."
     )
+    st.session_state["selected_stock"] = sb_stock
     
     # 2. Benchmark Inclusion
     has_benchmark = BENCHMARK in df_returns.columns
-    use_benchmark = st.checkbox(
+    sb_benchmark = st.checkbox(
         "Compare with S&P 500 (^GSPC)",
-        value=has_benchmark,
+        value=st.session_state["use_benchmark"],
         disabled=not has_benchmark,
         help="Include S&P 500 benchmark in charts and comparisons."
     )
+    st.session_state["use_benchmark"] = sb_benchmark
     
-    st.markdown("<hr style='margin: 12px 0; border: none; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin: 14px 0; border: none; border-top: 1px solid #E6EAF1;'>", unsafe_allow_html=True)
     
     # 3. Date Filter
     min_date = df_returns.index.min().to_pydatetime()
@@ -506,8 +689,9 @@ with st.sidebar:
     date_preset = st.radio(
         "Date Window",
         ["Full 5 Years", "Past 3 Years", "Past 1 Year", "Custom Range"],
-        index=0
+        index=["Full 5 Years", "Past 3 Years", "Past 1 Year", "Custom Range"].index(st.session_state["date_preset"])
     )
+    st.session_state["date_preset"] = date_preset
     
     if date_preset == "Past 1 Year":
         filter_start = max(min_date, max_date - pd.Timedelta(days=365))
@@ -535,11 +719,11 @@ with st.sidebar:
     ts_start = pd.to_datetime(filter_start)
     ts_end = pd.to_datetime(filter_end)
     
-    st.markdown("<hr style='margin: 12px 0; border: none; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin: 14px 0; border: none; border-top: 1px solid #E6EAF1;'>", unsafe_allow_html=True)
     
     # 4. Navigation Menu
     nav_selection = st.radio(
-        "Section",
+        "Navigation",
         [
             "Overview",
             "Historical Trends",
@@ -554,13 +738,17 @@ with st.sidebar:
         index=0
     )
 
+selected_stock = st.session_state["selected_stock"]
+use_benchmark = st.session_state["use_benchmark"]
+
 # Slice active data according to selected date filter
 active_returns = df_returns.loc[(df_returns.index >= ts_start) & (df_returns.index <= ts_end)].copy()
 active_prices = df_prices.loc[(df_prices.index >= ts_start) & (df_prices.index <= ts_end)].copy()
 
 stock_return_series = active_returns[selected_stock].dropna()
-stock_price_series = active_prices[selected_stock].dropna() if selected_stock in active_prices.columns else pd.Series()
+stock_price_series = active_prices[selected_stock].dropna() if selected_stock in active_prices.columns else pd.Series(dtype=float)
 benchmark_return_series = active_returns[BENCHMARK].dropna() if (use_benchmark and BENCHMARK in active_returns.columns) else None
+benchmark_price_series = active_prices[BENCHMARK].dropna() if (use_benchmark and BENCHMARK in active_prices.columns) else None
 
 latest_avail_date_str = df_prices.index.max().strftime("%B %d, %Y")
 
@@ -569,16 +757,18 @@ latest_avail_date_str = df_prices.index.max().strftime("%B %d, %Y")
 # 1. OVERVIEW PAGE (HERO / LANDING)
 # ==========================================
 if nav_selection == "Overview":
-    # Header area
+    # A. Header Area
     st.markdown(f"""
     <div class="app-header">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+        <div class="header-top">
             <div>
+                <div class="identity-mark">PORTFOLIO & RISK RESEARCH</div>
                 <div class="app-title">Stock Market Return Statistical Analyzer</div>
-                <div class="app-subtitle">Explore stock performance, daily returns, statistical patterns, and prediction models.</div>
+                <div class="app-subtitle">Explore market performance, risk, and statistical patterns.</div>
             </div>
-            <div style="text-align: right;">
-                <span class="badge-neutral" style="font-size: 0.8rem; font-weight: 500;">Data current as of {latest_avail_date_str}</span>
+            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                <span class="badge-neutral" style="font-size: 0.78rem; font-weight: 600;">Data as of {latest_avail_date_str}</span>
+                <span style="font-size: 0.76rem; color: #69778C;">Active: <strong>{selected_stock}</strong> • {ts_start.strftime('%b %Y')} – {ts_end.strftime('%b %Y')}</span>
             </div>
         </div>
     </div>
@@ -587,10 +777,15 @@ if nav_selection == "Overview":
     if stock_return_series.empty or stock_price_series.empty:
         st.warning("No price data available for the selected dates.")
     else:
-        # Key metrics calculations
+        # B. Key Metrics Calculations
         p_start = float(stock_price_series.iloc[0])
         p_end = float(stock_price_series.iloc[-1])
-        cumulative_return = ((p_end - p_start) / p_start) * 100
+        period_return = ((p_end - p_start) / p_start) * 100
+        
+        # Dataset inception calculation (full dataset start to end)
+        full_price_series = df_prices[selected_stock].dropna()
+        p_inception_start = float(full_price_series.iloc[0])
+        inception_return = ((p_end - p_inception_start) / p_inception_start) * 100
         
         avg_daily_return = float(stock_return_series.mean())
         daily_volatility = float(stock_return_series.std(ddof=1))
@@ -598,170 +793,351 @@ if nav_selection == "Overview":
         annualized_volatility = daily_volatility * np.sqrt(252)
         sharpe_ratio = (annualized_return / annualized_volatility) if annualized_volatility > 0 else 0.0
         
-        # Drawdown
+        # Benchmark calculations
+        bm_period_return = 0.0
+        if benchmark_price_series is not None and not benchmark_price_series.empty:
+            bm_start = float(benchmark_price_series.iloc[0])
+            bm_end = float(benchmark_price_series.iloc[-1])
+            bm_period_return = ((bm_end - bm_start) / bm_start) * 100
+            
+        # Drawdown calculation
         rolling_max = stock_price_series.cummax()
         drawdowns = (stock_price_series - rolling_max) / rolling_max * 100
         max_drawdown = float(drawdowns.min())
-        
-        # 4 Key Metric Cards
+
+        # B. KPI Strip (4 compact cards)
         c1, c2, c3, c4 = st.columns(4)
         
         with c1:
             st.markdown(f"""
             <div class="metric-card">
-                <div class="metric-label">Latest Closing Price</div>
+                <div class="metric-label">Latest Close</div>
                 <div class="metric-value">${p_end:,.2f}</div>
-                <div class="metric-sub"><span class="badge-neutral">{selected_stock} • Base: ${p_start:,.2f}</span></div>
+                <div class="metric-sub">
+                    <span class="badge-neutral">{selected_stock}</span>
+                    <span style="color: #69778C; font-size: 0.78rem;">Period Base: ${p_start:,.2f}</span>
+                </div>
             </div>
             """, unsafe_allow_html=True)
             
         with c2:
-            cum_sign = "+" if cumulative_return >= 0 else ""
-            badge_type = "badge-pos" if cumulative_return >= 0 else "badge-neg"
+            ret_sign = "+" if period_return >= 0 else ""
+            ret_badge = "badge-pos" if period_return >= 0 else "badge-neg"
+            inc_sign = "+" if inception_return >= 0 else ""
             st.markdown(f"""
             <div class="metric-card">
-                <div class="metric-label">Cumulative Return</div>
-                <div class="metric-value">{cum_sign}{cumulative_return:.2f}%</div>
-                <div class="metric-sub"><span class="{badge_type}">{cum_sign}{cumulative_return:.1f}% over {len(stock_return_series):,} days</span></div>
+                <div class="metric-label">Total Return</div>
+                <div class="metric-value" style="color: {'#16856B' if period_return >= 0 else '#D94F59'};">{ret_sign}{period_return:.2f}%</div>
+                <div class="metric-sub">
+                    <span class="{ret_badge}">{ret_sign}{period_return:.1f}% Selected</span>
+                    <span class="badge-neutral">Inception: {inc_sign}{inception_return:.1f}%</span>
+                </div>
             </div>
             """, unsafe_allow_html=True)
             
         with c3:
             avg_sign = "+" if avg_daily_return >= 0 else ""
-            badge_avg = "badge-pos" if avg_daily_return >= 0 else "badge-neg"
+            avg_badge = "badge-pos" if avg_daily_return >= 0 else "badge-neg"
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">Average Daily Return</div>
                 <div class="metric-value">{avg_sign}{avg_daily_return:.3f}%</div>
-                <div class="metric-sub"><span class="{badge_avg}">Annualized: {avg_sign}{annualized_return:.1f}%</span></div>
+                <div class="metric-sub">
+                    <span class="{avg_badge}">Annualized: {avg_sign}{annualized_return:.1f}% p.a.</span>
+                </div>
             </div>
             """, unsafe_allow_html=True)
             
         with c4:
             st.markdown(f"""
             <div class="metric-card">
-                <div class="metric-label">Daily Volatility (s)</div>
+                <div class="metric-label">Daily Volatility</div>
                 <div class="metric-value">{daily_volatility:.2f}%</div>
-                <div class="metric-sub"><span class="badge-neutral">Annualized: {annualized_volatility:.1f}%</span></div>
+                <div class="metric-sub">
+                    <span class="badge-neutral">Annualized: {annualized_volatility:.1f}% p.a.</span>
+                </div>
             </div>
             """, unsafe_allow_html=True)
             
-        st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
         
-        # MAIN CHART: Rebased Performance Comparison (Base = 100)
-        st.markdown("### Historical Performance vs. S&P 500 (Base = 100)")
-        
+        # C. Main Performance Visualization (Rebased to 100)
         norm_stock = (stock_price_series / p_start) * 100
+        cum_gain_stock = norm_stock - 100
         
         fig_main = go.Figure()
+        
         fig_main.add_trace(go.Scatter(
             x=norm_stock.index,
             y=norm_stock.values,
             mode='lines',
-            name=f"{selected_stock} ({cum_sign}{cumulative_return:.1f}%)",
-            line=dict(color='#3563E9', width=2.4),
-            hovertemplate="<b>Date:</b> %{x|%b %d, %Y}<br><b>Normalized:</b> %{y:.1f}<extra></extra>"
+            name=f"{selected_stock} ({ret_sign}{period_return:.1f}%)",
+            line=dict(color='#315CEB', width=2.4),
+            customdata=cum_gain_stock.values,
+            hovertemplate="<b>%{x|%b %d, %Y}</b><br>Normalized: <b>%{y:.2f}</b><br>Period Return: <b>%{customdata:+.2f}%</b><extra></extra>"
         ))
         
-        bm_cum = 0.0
-        if benchmark_return_series is not None and BENCHMARK in active_prices.columns:
-            bm_prices = active_prices[BENCHMARK].dropna()
-            if not bm_prices.empty:
-                bm_start = float(bm_prices.iloc[0])
-                bm_end = float(bm_prices.iloc[-1])
-                bm_cum = ((bm_end - bm_start) / bm_start) * 100
-                norm_bm = (bm_prices / bm_start) * 100
-                bm_sign = "+" if bm_cum >= 0 else ""
-                
-                fig_main.add_trace(go.Scatter(
-                    x=norm_bm.index,
-                    y=norm_bm.values,
-                    mode='lines',
-                    name=f"S&P 500 (^GSPC) ({bm_sign}{bm_cum:.1f}%)",
-                    line=dict(color='#94A3B8', width=1.8, dash='dash'),
-                    hovertemplate="<b>Date:</b> %{x|%b %d, %Y}<br><b>S&P 500:</b> %{y:.1f}<extra></extra>"
-                ))
-                
-        # Reference line at 100
-        fig_main.add_hline(y=100, line_dash="dot", line_color="#CBD5E1", line_width=1)
-        
-        fig_main.update_layout(create_clean_layout(
-            title="",
-            xaxis_title="",
-            yaxis_title="Normalized Value (Start = 100)",
-            height=400
-        ))
-        st.plotly_chart(fig_main, use_container_width=True)
-        
-        # AUTOMATED FACTUAL OBSERVATION BOX
-        stock_win_pct = float((stock_return_series > 0).mean() * 100)
-        perf_comparison = "outperformed" if cumulative_return > bm_cum else "underperformed"
-        
-        observation_msg = (
-            f"Over the {len(stock_return_series):,} trading sessions between {stock_price_series.index.min().strftime('%b %d, %Y')} "
-            f"and {stock_price_series.index.max().strftime('%b %d, %Y')}, {selected_stock} generated a cumulative return of "
-            f"{cum_sign}{cumulative_return:.1f}%, which {perf_comparison} the S&P 500 benchmark ({'+' if bm_cum >= 0 else ''}{bm_cum:.1f}%). "
-            f"The asset exhibited an average daily return of {avg_sign}{avg_daily_return:.3f}% alongside a daily volatility of {daily_volatility:.2f}% "
-            f"(annualized to {annualized_volatility:.1f}%), yielding a Sharpe ratio of {sharpe_ratio:.2f}. "
-            f"Overall, {stock_win_pct:.1f}% of observed trading sessions closed with positive returns, with a peak-to-trough maximum drawdown of {max_drawdown:.1f}%."
+        if benchmark_price_series is not None and not benchmark_price_series.empty:
+            bm_start_val = float(benchmark_price_series.iloc[0])
+            norm_bm = (benchmark_price_series / bm_start_val) * 100
+            cum_gain_bm = norm_bm - 100
+            bm_sign = "+" if bm_period_return >= 0 else ""
+            
+            fig_main.add_trace(go.Scatter(
+                x=norm_bm.index,
+                y=norm_bm.values,
+                mode='lines',
+                name=f"S&P 500 (^GSPC) ({bm_sign}{bm_period_return:.1f}%)",
+                line=dict(color='#69778C', width=1.8, dash='dash'),
+                customdata=cum_gain_bm.values,
+                hovertemplate="<b>%{x|%b %d, %Y}</b><br>S&P 500 Normalized: <b>%{y:.2f}</b><br>Return: <b>%{customdata:+.2f}%</b><extra></extra>"
+            ))
+            
+        # Rebase reference line at 100
+        fig_main.add_hline(
+            y=100,
+            line_dash="dot",
+            line_color="#CBD5E1",
+            line_width=1.2,
+            annotation_text="Base 100",
+            annotation_position="bottom right",
+            annotation_font=dict(size=10, color="#69778C")
         )
         
+        main_layout = create_clean_layout(
+            title=f"Normalized Growth: {selected_stock} vs. S&P 500 Benchmark (Rebased to 100)",
+            xaxis_title="Date",
+            yaxis_title="Normalized Index (Start = 100)",
+            height=410
+        )
+        
+        # Add range selector buttons [1M, 3M, 6M, 1Y, All]
+        main_layout.xaxis.update(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1, label="1M", step="month", stepmode="backward"),
+                    dict(count=3, label="3M", step="month", stepmode="backward"),
+                    dict(count=6, label="6M", step="month", stepmode="backward"),
+                    dict(count=1, label="1Y", step="year", stepmode="backward"),
+                    dict(step="all", label="All")
+                ]),
+                font=dict(family="Inter, sans-serif", size=10, color="#17243A"),
+                bgcolor="#FAFBFD",
+                activecolor="#E8F0FE",
+                bordercolor="#E6EAF1",
+                borderwidth=1
+            )
+        )
+        fig_main.update_layout(main_layout)
+        st.plotly_chart(fig_main, use_container_width=True)
+        st.caption("*Both asset series are rebased to 100.0 at the beginning of the selected period to make relative capital performance directly comparable.")
+        
+        st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+        
+        # D. Secondary Chart Row (Two-column layout)
+        col_sec1, col_sec2 = st.columns(2)
+        
+        with col_sec1:
+            ret_colors = ['#16856B' if v >= 0 else '#D94F59' for v in stock_return_series.values]
+            fig_daily = go.Figure(go.Bar(
+                x=stock_return_series.index,
+                y=stock_return_series.values,
+                marker_color=ret_colors,
+                name="Daily Return",
+                hovertemplate="<b>%{x|%b %d, %Y}</b><br>Daily Return: <b>%{y:+.2f}%</b><extra></extra>"
+            ))
+            fig_daily.add_hline(y=0, line_color="#69778C", line_width=1.2)
+            fig_daily.update_layout(create_clean_layout(
+                title=f"{selected_stock} Daily Percentage Returns",
+                xaxis_title="Date",
+                yaxis_title="Daily Return (%)",
+                height=350,
+                show_legend=False
+            ))
+            st.plotly_chart(fig_daily, use_container_width=True)
+            
+        with col_sec2:
+            # Risk vs Return scatter for all stocks
+            scatter_tickers = [t for t in stock_tickers if t in active_returns.columns]
+            if use_benchmark and BENCHMARK in active_returns.columns:
+                scatter_tickers.append(BENCHMARK)
+                
+            vol_vals = []
+            ret_vals = []
+            symbols = []
+            colors = []
+            sizes = []
+            labels = []
+            
+            for t in scatter_tickers:
+                s_ret = active_returns[t].dropna()
+                if not s_ret.empty:
+                    ann_v = float(s_ret.std(ddof=1) * np.sqrt(252))
+                    ann_r = float(s_ret.mean() * 252)
+                    vol_vals.append(ann_v)
+                    ret_vals.append(ann_r)
+                    labels.append(t)
+                    
+                    if t == selected_stock:
+                        symbols.append('circle')
+                        colors.append('#315CEB')
+                        sizes.append(14)
+                    elif t == BENCHMARK:
+                        symbols.append('diamond')
+                        colors.append('#17243A')
+                        sizes.append(12)
+                    else:
+                        symbols.append('circle')
+                        colors.append('#69778C')
+                        sizes.append(10)
+                        
+            fig_rr = go.Figure()
+            fig_rr.add_trace(go.Scatter(
+                x=vol_vals,
+                y=ret_vals,
+                mode='markers+text',
+                text=labels,
+                textposition="top center",
+                textfont=dict(family="Plus Jakarta Sans, sans-serif", size=10, color="#17243A"),
+                marker=dict(
+                    symbol=symbols,
+                    color=colors,
+                    size=sizes,
+                    line=dict(color="#17243A", width=1.2)
+                ),
+                hovertemplate="<b>%{text}</b><br>Annualized Volatility: %{x:.1f}%<br>Annualized Return: %{y:+.1f}%<extra></extra>"
+            ))
+            fig_rr.add_hline(y=0, line_dash="dash", line_color="#E6EAF1", line_width=1)
+            fig_rr.update_layout(create_clean_layout(
+                title="Risk vs. Return Profile (Annualized)",
+                xaxis_title="Annualized Volatility (%)",
+                yaxis_title="Annualized Return (%)",
+                height=350,
+                show_legend=False
+            ))
+            st.plotly_chart(fig_rr, use_container_width=True)
+            st.caption("*Annualized assuming 252 trading sessions per year: Return = μ × 252, Volatility = σ × √252.")
+            
+        st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+        
+        # E. Stock Comparison Table
+        st.markdown("### Stock & Benchmark Comparative Overview")
+        
+        comp_rows = []
+        all_eval_tickers = [t for t in stock_tickers if t in active_returns.columns and t in active_prices.columns]
+        if BENCHMARK in active_returns.columns and BENCHMARK in active_prices.columns:
+            all_eval_tickers.append(BENCHMARK)
+            
+        for t in all_eval_tickers:
+            r_s = active_returns[t].dropna()
+            p_s = active_prices[t].dropna()
+            if not r_s.empty and not p_s.empty:
+                c_ret = ((p_s.iloc[-1] - p_s.iloc[0]) / p_s.iloc[0]) * 100
+                d_ret = float(r_s.mean())
+                d_vol = float(r_s.std(ddof=1))
+                a_vol = d_vol * np.sqrt(252)
+                a_ret = d_ret * 252
+                sh = (a_ret / a_vol) if a_vol > 0 else 0.0
+                comp_rows.append({
+                    "ticker": t,
+                    "is_active": t == selected_stock,
+                    "latest_price": p_s.iloc[-1],
+                    "period_ret": c_ret,
+                    "avg_daily_ret": d_ret,
+                    "ann_vol": a_vol,
+                    "sharpe": sh
+                })
+                
+        # Render clean HTML financial table
+        html_rows = ""
+        for r in comp_rows:
+            active_cls = ' class="active-row"' if r['is_active'] else ''
+            p_sign = "+" if r['period_ret'] >= 0 else ""
+            p_cls = "badge-pos" if r['period_ret'] >= 0 else "badge-neg"
+            d_sign = "+" if r['avg_daily_ret'] >= 0 else ""
+            d_cls = "badge-pos" if r['avg_daily_ret'] >= 0 else "badge-neg"
+            
+            ticker_display = f"<strong>{r['ticker']}</strong>"
+            if r['is_active']:
+                ticker_display += ' <span class="badge-accent" style="margin-left: 4px;">Selected</span>'
+            elif r['ticker'] == BENCHMARK:
+                ticker_display += ' <span class="badge-neutral" style="margin-left: 4px;">Benchmark</span>'
+                
+            html_rows += f"""
+            <tr{active_cls}>
+                <td>{ticker_display}</td>
+                <td style="text-align: right; font-variant-numeric: tabular-nums;">${r['latest_price']:,.2f}</td>
+                <td style="text-align: right;"><span class="{p_cls}">{p_sign}{r['period_ret']:.2f}%</span></td>
+                <td style="text-align: right;"><span class="{d_cls}">{d_sign}{r['avg_daily_ret']:.3f}%</span></td>
+                <td style="text-align: right; font-variant-numeric: tabular-nums;">{r['ann_vol']:.2f}%</td>
+                <td style="text-align: right; font-variant-numeric: tabular-nums;">{r['sharpe']:.2f}</td>
+            </tr>
+            """
+            
         st.markdown(f"""
-        <div class="observation-card">
-            <div class="observation-title">📌 Empirical Summary Observation</div>
-            <div class="observation-text">{observation_msg}</div>
+        <div class="table-container">
+            <table class="fin-table">
+                <thead>
+                    <tr>
+                        <th>Asset</th>
+                        <th style="text-align: right;">Latest Close</th>
+                        <th style="text-align: right;">Period Return</th>
+                        <th style="text-align: right;">Avg Daily Return</th>
+                        <th style="text-align: right;">Annualized Volatility</th>
+                        <th style="text-align: right;">Sharpe Ratio (Rf=0%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {html_rows}
+                </tbody>
+            </table>
         </div>
         """, unsafe_allow_html=True)
         
-        st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
         
-        # ADDITIONAL OVERVIEW SECTION: Multi-Stock Comparison Table & Risk Summary
-        col_tbl, col_risk = st.columns([1.6, 1])
+        # F. Key Observations (Up to three short statements generated from data)
+        # 1. Top return asset
+        top_ret_asset = max(comp_rows, key=lambda x: x['period_ret']) if comp_rows else None
+        # 2. Highest annualized volatility
+        top_vol_asset = max(comp_rows, key=lambda x: x['ann_vol']) if comp_rows else None
+        lowest_vol_asset = min(comp_rows, key=lambda x: x['ann_vol']) if comp_rows else None
+        # 3. Relative outperformance vs S&P 500
+        bench_row = next((r for r in comp_rows if r['ticker'] == BENCHMARK), None)
+        active_row = next((r for r in comp_rows if r['ticker'] == selected_stock), None)
         
-        with col_tbl:
-            st.markdown("### Available Stock Comparison")
-            rows = []
-            for t in stock_tickers:
-                if t in active_returns.columns and t in active_prices.columns:
-                    ret_s = active_returns[t].dropna()
-                    prc_s = active_prices[t].dropna()
-                    if not ret_s.empty and not prc_s.empty:
-                        c_ret = ((prc_s.iloc[-1] - prc_s.iloc[0]) / prc_s.iloc[0]) * 100
-                        d_vol = ret_s.std(ddof=1)
-                        ann_vol = d_vol * np.sqrt(252)
-                        rows.append({
-                            "Stock": t,
-                            "Latest Price": f"${prc_s.iloc[-1]:,.2f}",
-                            "Cumulative Return": f"{'+' if c_ret >= 0 else ''}{c_ret:.1f}%",
-                            "Avg Daily Return": f"{ret_s.mean():+.3f}%",
-                            "Daily Volatility": f"{d_vol:.2f}%",
-                            "Sharpe Ratio": f"{(ret_s.mean()*252)/ann_vol:.2f}" if ann_vol > 0 else "N/A"
-                        })
-            st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
+        obs_list = []
+        if top_ret_asset:
+            t_sign = "+" if top_ret_asset['period_ret'] >= 0 else ""
+            obs_list.append(
+                f"<strong>Highest Period Return:</strong> <strong>{top_ret_asset['ticker']}</strong> delivered the highest return of "
+                f"<strong>{t_sign}{top_ret_asset['period_ret']:.1f}%</strong> over the selected observation window."
+            )
             
-        with col_risk:
-            st.markdown("### Risk & Return Profile")
-            st.markdown(f"""
-            <div class="content-card" style="padding: 16px;">
-                <div style="font-size: 0.85rem; color: #64748B; margin-bottom: 8px;"><strong>Risk-Adjusted Metrics ({selected_stock})</strong></div>
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #F1F5F9; font-size: 0.88rem;">
-                    <span>Annualized Return:</span>
-                    <strong>{annualized_return:+.1f}%</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #F1F5F9; font-size: 0.88rem;">
-                    <span>Annualized Volatility:</span>
-                    <strong>{annualized_volatility:.1f}%</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #F1F5F9; font-size: 0.88rem;">
-                    <span>Sharpe Ratio (Rf=0%):</span>
-                    <strong>{sharpe_ratio:.2f}</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.88rem;">
-                    <span>Maximum Drawdown:</span>
-                    <strong style="color: #DC2626;">{max_drawdown:.1f}%</strong>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+        if top_vol_asset and lowest_vol_asset:
+            obs_list.append(
+                f"<strong>Volatility Spread:</strong> <strong>{top_vol_asset['ticker']}</strong> exhibited the highest annualized volatility at "
+                f"<strong>{top_vol_asset['ann_vol']:.1f}%</strong>, compared to the lowest observed volatility of "
+                f"<strong>{lowest_vol_asset['ann_vol']:.1f}%</strong> ({lowest_vol_asset['ticker']})."
+            )
+            
+        if bench_row and active_row:
+            diff = active_row['period_ret'] - bench_row['period_ret']
+            direction = "outperformed" if diff >= 0 else "underperformed"
+            diff_sign = "+" if diff >= 0 else ""
+            obs_list.append(
+                f"<strong>Benchmark Comparison:</strong> <strong>{selected_stock}</strong> {direction} the S&P 500 benchmark by "
+                f"<strong>{diff_sign}{diff:.1f} percentage points</strong> ({active_row['period_ret']:+.1f}% vs. {bench_row['period_ret']:+.1f}%)."
+            )
+            
+        obs_html = "".join([f'<div class="observation-item"><span class="observation-bullet">•</span><div>{item}</div></div>' for item in obs_list[:3]])
+        
+        st.markdown(f"""
+        <div class="observation-card">
+            <div class="observation-title">📌 Key Analytical Observations</div>
+            {obs_html}
+        </div>
+        """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -771,94 +1147,154 @@ elif nav_selection == "Historical Trends":
     st.markdown("""
     <div class="page-header">
         <div class="page-title">Historical Trends</div>
-        <div class="page-desc">Track historical prices, moving averages, and cumulative portfolio growth.</div>
+        <div class="page-desc">Track closing prices, technical moving averages, and cumulative portfolio growth.</div>
     </div>
     """, unsafe_allow_html=True)
     
     if stock_price_series.empty or stock_return_series.empty:
-        st.warning("Insufficient data available.")
+        st.warning("Insufficient data available for the active selection.")
     else:
-        tab_t1, tab_t2, tab_t3 = st.tabs(["Price Action & Moving Averages", "Growth of $10,000", "Daily Returns & Drawdown"])
+        tab_t1, tab_t2, tab_t3 = st.tabs([
+            "Price Action & Moving Averages",
+            "Normalized Growth ($10,000)",
+            "Daily Returns & Drawdowns"
+        ])
         
         with tab_t1:
             ma20 = stock_price_series.rolling(20).mean()
             ma50 = stock_price_series.rolling(50).mean()
             
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=stock_price_series.index, y=stock_price_series.values, mode='lines', name=f"{selected_stock} Close", line=dict(color='#3563E9', width=2.2)))
-            fig.add_trace(go.Scatter(x=ma20.index, y=ma20.values, mode='lines', name="20-Day MA", line=dict(color='#F59E0B', width=1.5, dash='dash')))
-            fig.add_trace(go.Scatter(x=ma50.index, y=ma50.values, mode='lines', name="50-Day MA", line=dict(color='#10B981', width=1.5, dash='dot')))
+            fig_p = go.Figure()
+            fig_p.add_trace(go.Scatter(
+                x=stock_price_series.index,
+                y=stock_price_series.values,
+                mode='lines',
+                name=f"{selected_stock} Close",
+                line=dict(color='#315CEB', width=2.2),
+                hovertemplate="<b>%{x|%b %d, %Y}</b><br>Price: <b>$%{y:,.2f}</b><extra></extra>"
+            ))
+            fig_p.add_trace(go.Scatter(
+                x=ma20.index,
+                y=ma20.values,
+                mode='lines',
+                name="20-Day MA",
+                line=dict(color='#F59E0B', width=1.5, dash='dash'),
+                hovertemplate="<b>%{x|%b %d, %Y}</b><br>20-Day MA: <b>$%{y:,.2f}</b><extra></extra>"
+            ))
+            fig_p.add_trace(go.Scatter(
+                x=ma50.index,
+                y=ma50.values,
+                mode='lines',
+                name="50-Day MA",
+                line=dict(color='#16856B', width=1.5, dash='dot'),
+                hovertemplate="<b>%{x|%b %d, %Y}</b><br>50-Day MA: <b>$%{y:,.2f}</b><extra></extra>"
+            ))
             
-            fig.update_layout(create_clean_layout(
+            fig_p.update_layout(create_clean_layout(
                 title=f"{selected_stock} Adjusted Closing Price with 20-Day and 50-Day Moving Averages",
                 xaxis_title="Date",
                 yaxis_title="Price ($ USD)",
                 height=420
             ))
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig_p, use_container_width=True)
             
-            with st.expander("About Moving Averages"):
-                st.caption("A 20-day moving average tracks short-term momentum, while a 50-day moving average highlights medium-term market trends by smoothing daily fluctuations.")
+            with st.expander("Technical Context: Moving Averages"):
+                st.caption(
+                    "A 20-day moving average reflects short-term market momentum, while a 50-day moving average smooths high-frequency noise "
+                    "to reveal medium-term structural trends without introducing subjective bias."
+                )
                 
         with tab_t2:
             growth_stock = (1 + stock_return_series / 100).cumprod() * 10000
             
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=growth_stock.index, y=growth_stock.values, mode='lines', name=f"{selected_stock} Portfolio", line=dict(color='#3563E9', width=2.4)))
+            fig_g = go.Figure()
+            fig_g.add_trace(go.Scatter(
+                x=growth_stock.index,
+                y=growth_stock.values,
+                mode='lines',
+                name=f"{selected_stock} Portfolio",
+                line=dict(color='#315CEB', width=2.4),
+                hovertemplate="<b>%{x|%b %d, %Y}</b><br>Value: <b>$%{y:,.2f}</b><extra></extra>"
+            ))
             
             if benchmark_return_series is not None and not benchmark_return_series.empty:
                 growth_bm = (1 + benchmark_return_series / 100).cumprod() * 10000
-                fig.add_trace(go.Scatter(x=growth_bm.index, y=growth_bm.values, mode='lines', name="S&P 500 (^GSPC)", line=dict(color='#94A3B8', width=1.8, dash='dash')))
+                fig_g.add_trace(go.Scatter(
+                    x=growth_bm.index,
+                    y=growth_bm.values,
+                    mode='lines',
+                    name="S&P 500 (^GSPC)",
+                    line=dict(color='#69778C', width=1.8, dash='dash'),
+                    hovertemplate="<b>%{x|%b %d, %Y}</b><br>S&P 500: <b>$%{y:,.2f}</b><extra></extra>"
+                ))
                 
-            fig.add_hline(y=10000, line_dash="dot", line_color="#CBD5E1", annotation_text="Initial $10,000", annotation_position="bottom right")
+            fig_g.add_hline(
+                y=10000,
+                line_dash="dot",
+                line_color="#CBD5E1",
+                annotation_text="Initial $10,000",
+                annotation_position="bottom right",
+                annotation_font=dict(size=10, color="#69778C")
+            )
             
-            fig.update_layout(create_clean_layout(
-                title=f"Cumulative Growth of an Initial $10,000 Investment",
+            fig_g.update_layout(create_clean_layout(
+                title="Cumulative Growth of an Initial $10,000 Investment",
                 xaxis_title="Date",
                 yaxis_title="Portfolio Value ($ USD)",
                 height=420
             ))
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig_g, use_container_width=True)
             
             final_val = float(growth_stock.iloc[-1])
-            st.caption(f"A $10,000 investment in {selected_stock} on {stock_return_series.index.min().strftime('%b %d, %Y')} would be worth **${final_val:,.2f}** on {stock_return_series.index.max().strftime('%b %d, %Y')}.")
+            tot_gain = final_val - 10000
+            st.caption(
+                f"An initial $10,000 investment in **{selected_stock}** on {stock_return_series.index.min().strftime('%b %d, %Y')} "
+                f"would be valued at **${final_val:,.2f}** ({'+' if tot_gain >= 0 else ''}${tot_gain:,.2f}) as of {stock_return_series.index.max().strftime('%b %d, %Y')}."
+            )
             
         with tab_t3:
-            col_bar, col_dd = st.columns(2)
+            col_b, col_d = st.columns(2)
             
-            with col_bar:
-                colors = ['#10B981' if v >= 0 else '#EF4444' for v in stock_return_series.values]
-                fig_ret = go.Figure(go.Bar(
+            with col_b:
+                bar_cols = ['#16856B' if v >= 0 else '#D94F59' for v in stock_return_series.values]
+                fig_bar = go.Figure(go.Bar(
                     x=stock_return_series.index,
                     y=stock_return_series.values,
-                    marker_color=colors,
-                    name="Daily Return"
+                    marker_color=bar_cols,
+                    name="Daily Return",
+                    hovertemplate="<b>%{x|%b %d, %Y}</b><br>Return: <b>%{y:+.2f}%</b><extra></extra>"
                 ))
-                fig_ret.update_layout(create_clean_layout(
+                fig_bar.add_hline(y=0, line_color="#69778C", line_width=1.2)
+                fig_bar.update_layout(create_clean_layout(
                     title=f"{selected_stock} Daily Percentage Return Fluctuations",
                     xaxis_title="Date",
                     yaxis_title="Return (%)",
-                    height=360
+                    height=360,
+                    show_legend=False
                 ))
-                st.plotly_chart(fig_ret, use_container_width=True)
+                st.plotly_chart(fig_bar, use_container_width=True)
                 
-            with col_dd:
-                rolling_max = stock_price_series.cummax()
-                drawdown = (stock_price_series - rolling_max) / rolling_max * 100
+            with col_d:
+                rolling_peak = stock_price_series.cummax()
+                dd_series = (stock_price_series - rolling_peak) / rolling_peak * 100
+                
                 fig_dd = go.Figure(go.Scatter(
-                    x=drawdown.index,
-                    y=drawdown.values,
+                    x=dd_series.index,
+                    y=dd_series.values,
                     mode='lines',
-                    line=dict(color='#EF4444', width=1.5),
+                    line=dict(color='#D94F59', width=1.5),
                     fill='tozeroy',
-                    fillcolor='rgba(239, 68, 68, 0.1)',
-                    name="Drawdown"
+                    fillcolor='rgba(217, 79, 89, 0.12)',
+                    name="Drawdown",
+                    hovertemplate="<b>%{x|%b %d, %Y}</b><br>Drawdown: <b>%{y:.2f}%</b><extra></extra>"
                 ))
+                fig_dd.add_hline(y=0, line_color="#69778C", line_width=1)
                 fig_dd.update_layout(create_clean_layout(
-                    title=f"{selected_stock} Drawdown from Peak",
+                    title=f"{selected_stock} Peak-to-Trough Drawdown",
                     xaxis_title="Date",
-                    yaxis_title="Drawdown (%)",
-                    height=360
+                    yaxis_title="Drawdown from Peak (%)",
+                    height=360,
+                    show_legend=False
                 ))
                 st.plotly_chart(fig_dd, use_container_width=True)
 
@@ -870,12 +1306,12 @@ elif nav_selection == "Statistics":
     st.markdown("""
     <div class="page-header">
         <div class="page-title">Descriptive Statistics</div>
-        <div class="page-desc">Understand the typical return and how much returns vary.</div>
+        <div class="page-desc">Quantify central tendency, dispersion, and distribution asymmetry for equity returns.</div>
     </div>
     """, unsafe_allow_html=True)
     
     if stock_return_series.empty:
-        st.warning("No data points available.")
+        st.warning("No data points available for the selected dates.")
     else:
         stats_series = calculate_descriptive_stats(stock_return_series)
         
@@ -883,12 +1319,24 @@ elif nav_selection == "Statistics":
         with col_s1:
             st.markdown(f"""
             <div class="content-card">
-                <div class="card-title">Central Tendency</div>
-                <div style="font-size: 0.9rem; line-height: 1.8;">
-                    <strong>Mean:</strong> {stats_series['Mean (%)']:+.4f}%<br>
-                    <strong>Median:</strong> {stats_series['Median (%)']:+.4f}%<br>
-                    <strong>Mode:</strong> {stats_series['Mode (%)']:+.4f}%<br>
-                    <strong>Observations:</strong> {int(stats_series['Count']):,}
+                <div class="card-title">Central Tendency ({selected_stock})</div>
+                <div style="font-size: 0.88rem; line-height: 1.85;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">Mean Daily Return:</span>
+                        <strong>{stats_series['Mean (%)']:+.4f}%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">Median Daily Return:</span>
+                        <strong>{stats_series['Median (%)']:+.4f}%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">Sample Mode:</span>
+                        <strong>{stats_series['Mode (%)']:+.4f}%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                        <span style="color: #69778C;">Sample Size (n):</span>
+                        <strong>{int(stats_series['Count']):,} sessions</strong>
+                    </div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -896,54 +1344,116 @@ elif nav_selection == "Statistics":
         with col_s2:
             st.markdown(f"""
             <div class="content-card">
-                <div class="card-title">Spread & Dispersion</div>
-                <div style="font-size: 0.9rem; line-height: 1.8;">
-                    <strong>Standard Deviation:</strong> {stats_series['Std Deviation (%)']:.4f}%<br>
-                    <strong>Variance:</strong> {stats_series['Variance (%²)']:.4f}%²<br>
-                    <strong>Interquartile Range:</strong> {stats_series['IQR (%)']:.4f}%<br>
-                    <strong>Range:</strong> [{stats_series['Minimum (%)']:.2f}%, {stats_series['Maximum (%)']:.2f}%]
+                <div class="card-title">Spread & Dispersion ({selected_stock})</div>
+                <div style="font-size: 0.88rem; line-height: 1.85;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">Sample Std Dev (s):</span>
+                        <strong>{stats_series['Std Deviation (%)']:.4f}%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">Sample Variance (s²):</span>
+                        <strong>{stats_series['Variance (%²)']:.4f}%²</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">Interquartile Range (IQR):</span>
+                        <strong>{stats_series['IQR (%)']:.4f}%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                        <span style="color: #69778C;">Range [Min, Max]:</span>
+                        <strong>[{stats_series['Minimum (%)']:.2f}%, {stats_series['Maximum (%)']:.2f}%]</strong>
+                    </div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
         with col_s3:
-            skew_val = stats_series['Skewness']
-            kurt_val = stats_series['Kurtosis']
             st.markdown(f"""
             <div class="content-card">
-                <div class="card-title">Distribution Shape</div>
-                <div style="font-size: 0.9rem; line-height: 1.8;">
-                    <strong>Skewness:</strong> {skew_val:+.4f}<br>
-                    <strong>Excess Kurtosis:</strong> {kurt_val:.4f}<br>
-                    <strong>Q1 (25th):</strong> {stats_series['Q1 (25th %)']:+.4f}%<br>
-                    <strong>Q3 (75th):</strong> {stats_series['Q3 (75th %)']:+.4f}%
+                <div class="card-title">Shape & Percentiles ({selected_stock})</div>
+                <div style="font-size: 0.88rem; line-height: 1.85;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">Fisher Skewness:</span>
+                        <strong>{stats_series['Skewness']:+.4f}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">Excess Kurtosis:</span>
+                        <strong>{stats_series['Kurtosis']:.4f}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                        <span style="color: #69778C;">25th Percentile (Q1):</span>
+                        <strong>{stats_series['Q1 (25th %)']:+.4f}%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                        <span style="color: #69778C;">75th Percentile (Q3):</span>
+                        <strong>{stats_series['Q3 (75th %)']:+.4f}%</strong>
+                    </div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
         st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
         
-        # Cross-asset comparison table
-        st.markdown("### Cross-Stock Statistical Comparison")
-        all_stats = {}
-        for t in stock_tickers:
-            if t in active_returns.columns:
-                s = active_returns[t].dropna()
-                if not s.empty:
-                    all_stats[t] = calculate_descriptive_stats(s)
+        # Visual Comparison: Mean Return vs Volatility Bar Chart across all available assets
+        st.markdown("### Visual Comparison: Return vs. Volatility by Asset")
+        
+        comp_tickers = [t for t in stock_tickers if t in active_returns.columns]
         if use_benchmark and BENCHMARK in active_returns.columns:
-            s_bm = active_returns[BENCHMARK].dropna()
-            if not s_bm.empty:
-                all_stats[BENCHMARK] = calculate_descriptive_stats(s_bm)
+            comp_tickers.append(BENCHMARK)
+            
+        means_list = []
+        vols_list = []
+        medians_list = []
+        for t in comp_tickers:
+            s_t = active_returns[t].dropna()
+            means_list.append(float(s_t.mean()))
+            vols_list.append(float(s_t.std(ddof=1)))
+            medians_list.append(float(s_t.median()))
+            
+        fig_stat = go.Figure()
+        fig_stat.add_trace(go.Bar(
+            x=comp_tickers,
+            y=means_list,
+            name="Daily Mean Return (%)",
+            marker_color='#315CEB'
+        ))
+        fig_stat.add_trace(go.Bar(
+            x=comp_tickers,
+            y=medians_list,
+            name="Daily Median Return (%)",
+            marker_color='#16856B'
+        ))
+        fig_stat.add_trace(go.Bar(
+            x=comp_tickers,
+            y=vols_list,
+            name="Daily Volatility / Std Dev (%)",
+            marker_color='#69778C'
+        ))
+        
+        fig_stat.add_hline(y=0, line_color="#E6EAF1", line_width=1)
+        fig_stat.update_layout(create_clean_layout(
+            title="Comparison of Daily Mean, Median, and Volatility across Assets",
+            xaxis_title="Asset",
+            yaxis_title="Percentage (%)",
+            height=370
+        ))
+        st.plotly_chart(fig_stat, use_container_width=True)
+        
+        # Cross-asset comparison table
+        st.markdown("### Cross-Stock Descriptive Statistics Table")
+        all_stats = {}
+        for t in comp_tickers:
+            s = active_returns[t].dropna()
+            if not s.empty:
+                all_stats[t] = calculate_descriptive_stats(s)
                 
         df_all_stats = pd.DataFrame(all_stats).T
         st.dataframe(df_all_stats.round(4), use_container_width=True)
         
         with st.expander("Statistical Concept Reference"):
             st.markdown("""
-            - **Skewness:** Measures symmetry. Positive values indicate a longer right tail (infrequent large gains), while negative values indicate a longer left tail.
-            - **Excess Kurtosis:** Measures tail weight relative to a normal distribution (0). Positive kurtosis (leptokurtosis) indicates 'fat tails' with higher probabilities of extreme market moves.
-            - **IQR (Interquartile Range):** The difference between the 75th and 25th percentiles, covering the middle 50% of return outcomes.
+            - **Skewness:** Measures the symmetry of the probability distribution. Positive skew indicates longer right tails (occasional large positive gains), while negative skew indicates downside tail risk.
+            - **Excess Kurtosis:** Quantifies heavy-tail probability relative to a Gaussian distribution (0.0). Positive excess kurtosis (leptokurtosis) is typical of financial returns, implying extreme daily shocks occur far more frequently than predicted by normal models.
+            - **IQR (Interquartile Range):** The difference between Q3 (75th percentile) and Q1 (25th percentile), covering the central 50% of observed return outcomes.
             """)
 
 
@@ -954,71 +1464,88 @@ elif nav_selection == "Return Distribution":
     st.markdown("""
     <div class="page-header">
         <div class="page-title">Return Distribution</div>
-        <div class="page-desc">See how returns are spread and identify unusually large movements.</div>
+        <div class="page-desc">Examine empirical return density, theoretical Gaussian models, and outlier dispersion.</div>
     </div>
     """, unsafe_allow_html=True)
     
     if stock_return_series.empty:
-        st.warning("No data points available.")
+        st.warning("No data points available for the selected dates.")
     else:
         clean_ret = stock_return_series.to_numpy()
         mu = float(np.mean(clean_ret))
         sigma = float(np.std(clean_ret, ddof=1))
         
-        tab_dist1, tab_dist2, tab_dist3 = st.tabs(["Histogram & Normal Fit", "Box Plot & Outliers", "Empirical Rule vs. Chebyshev"])
+        tab_d1, tab_d2, tab_d3 = st.tabs([
+            "Histogram & Normal Curve",
+            "Box Plot & Outliers",
+            "Empirical Rule vs. Chebyshev"
+        ])
         
-        with tab_dist1:
-            fig_hist = go.Figure()
-            fig_hist.add_trace(go.Histogram(
+        with tab_d1:
+            fig_h = go.Figure()
+            fig_h.add_trace(go.Histogram(
                 x=clean_ret,
                 histnorm='probability density',
                 nbinsx=50,
-                name="Observed Returns",
-                marker_color='#3563E9',
-                opacity=0.65
+                name="Empirical Returns",
+                marker_color='#315CEB',
+                opacity=0.65,
+                hovertemplate="Bin Range: %{x}<br>Density: %{y:.4f}<extra></extra>"
             ))
             
-            x_range = np.linspace(clean_ret.min() - 0.5, clean_ret.max() + 0.5, 200)
-            pdf_vals = stats.norm.pdf(x_range, loc=mu, scale=sigma)
-            fig_hist.add_trace(go.Scatter(
-                x=x_range,
-                y=pdf_vals,
+            x_grid = np.linspace(clean_ret.min() - 0.5, clean_ret.max() + 0.5, 200)
+            norm_pdf = stats.norm.pdf(x_grid, loc=mu, scale=sigma)
+            fig_h.add_trace(go.Scatter(
+                x=x_grid,
+                y=norm_pdf,
                 mode='lines',
-                name=f"Normal Fit (μ={mu:.2f}%, s={sigma:.2f}%)",
-                line=dict(color='#F59E0B', width=2.2)
+                name=f"Theoretical Normal N(μ={mu:.2f}%, s={sigma:.2f}%)",
+                line=dict(color='#F59E0B', width=2.2),
+                hovertemplate="Return: %{x:.2f}%<br>Normal Density: %{y:.4f}<extra></extra>"
             ))
             
-            fig_hist.add_vline(x=mu, line_dash="dash", line_color="#10B981", annotation_text=f"Mean ({mu:.2f}%)")
-            fig_hist.update_layout(create_clean_layout(
-                title=f"{selected_stock} Daily Return Distribution vs. Normal Distribution Curve",
+            # Zero and Mean vertical reference lines
+            fig_h.add_vline(x=0, line_color="#69778C", line_width=1.2, line_dash="solid")
+            fig_h.add_vline(x=mu, line_color="#16856B", line_width=1.5, line_dash="dash", annotation_text=f"Mean ({mu:+.2f}%)", annotation_position="top right")
+            
+            fig_h.update_layout(create_clean_layout(
+                title=f"{selected_stock} Daily Return Histogram with Fitted Gaussian Normal Curve",
                 xaxis_title="Daily Return (%)",
-                yaxis_title="Density",
+                yaxis_title="Probability Density",
                 height=420
             ))
-            st.plotly_chart(fig_hist, use_container_width=True)
+            st.plotly_chart(fig_h, use_container_width=True)
+            st.caption("Notice the characteristic leptokurtic peak near 0% and extended tails compared to the theoretical normal distribution.")
             
-        with tab_dist2:
-            fig_box = go.Figure()
-            for t in stock_tickers:
-                if t in active_returns.columns:
-                    s = active_returns[t].dropna()
-                    if not s.empty:
-                        fig_box.add_trace(go.Box(
-                            y=s.values,
-                            name=t,
-                            boxpoints='outliers',
-                            marker=dict(size=3, opacity=0.6),
-                            line_width=1.5
-                        ))
-            fig_box.update_layout(create_clean_layout(
-                title="Return Dispersion & Extreme Movement Outliers by Stock",
-                xaxis_title="Ticker",
+        with tab_d2:
+            fig_b = go.Figure()
+            disp_tickers = [t for t in stock_tickers if t in active_returns.columns]
+            if use_benchmark and BENCHMARK in active_returns.columns:
+                disp_tickers.append(BENCHMARK)
+                
+            for t in disp_tickers:
+                s = active_returns[t].dropna()
+                if not s.empty:
+                    fig_b.add_trace(go.Box(
+                        y=s.values,
+                        name=t,
+                        boxpoints='outliers',
+                        marker=dict(size=3, opacity=0.6),
+                        line=dict(color='#315CEB' if t == selected_stock else ('#17243A' if t == BENCHMARK else '#69778C'), width=1.5)
+                    ))
+                    
+            fig_b.add_hline(y=0, line_color="#69778C", line_width=1)
+            fig_b.update_layout(create_clean_layout(
+                title="Cross-Asset Return Dispersion & Extreme Outliers",
+                xaxis_title="Asset",
                 yaxis_title="Daily Return (%)",
-                height=400
+                height=400,
+                show_legend=False
             ))
-            st.plotly_chart(fig_box, use_container_width=True)
+            st.plotly_chart(fig_b, use_container_width=True)
+            st.caption("Points beyond the whiskers represent return sessions exceeding 1.5 × IQR from the first and third quartiles.")
             
-        with tab_dist3:
+        with tab_d3:
             n_tot = len(clean_ret)
             w1 = np.sum((clean_ret >= mu - sigma) & (clean_ret <= mu + sigma)) / n_tot * 100
             w2 = np.sum((clean_ret >= mu - 2*sigma) & (clean_ret <= mu + 2*sigma)) / n_tot * 100
@@ -1032,12 +1559,15 @@ elif nav_selection == "Return Distribution":
                     f"[{mu - 3*sigma:.2f}%, {mu + 3*sigma:.2f}%]"
                 ],
                 "Observed In Data": [f"{w1:.2f}%", f"{w2:.2f}%", f"{w3:.2f}%"],
-                "Normal Rule Benchmark": ["68.27%", "95.45%", "99.73%"],
+                "Normal Rule (Gaussian)": ["68.27%", "95.45%", "99.73%"],
                 "Chebyshev Guarantee": ["≥ 0.0%", "≥ 75.0%", "≥ 88.9%"]
             })
-            st.markdown("### Empirical Rule vs. Chebyshev's Inequality Evaluation")
+            st.markdown("### Empirical Rule (68-95-99.7) vs. Chebyshev Bound Evaluation")
             st.dataframe(df_rule, hide_index=True, use_container_width=True)
-            st.caption("While Chebyshev's Inequality guarantees absolute mathematical bounds for any distribution, empirical stock returns closely align with the normal 68-95-99.7 rule.")
+            st.caption(
+                "Chebyshev's inequality guarantees absolute mathematical minimum bounds for any arbitrary distribution, "
+                "whereas observed daily stock returns closely track Gaussian benchmarks with slight tail deviations."
+            )
 
 
 # ==========================================
@@ -1047,55 +1577,62 @@ elif nav_selection == "Sampling & CLT":
     st.markdown("""
     <div class="page-header">
         <div class="page-title">Sampling & Central Limit Theorem</div>
-        <div class="page-desc">Compare samples with the full dataset and explore how sample means behave.</div>
+        <div class="page-desc">Compare probability sampling strategies and verify sampling distribution convergence.</div>
     </div>
     """, unsafe_allow_html=True)
     
     if stock_return_series.empty:
-        st.warning("Insufficient data available.")
+        st.warning("Insufficient data available for sampling analysis.")
     else:
         population = stock_return_series.to_numpy()
         N = len(population)
         pop_mean = float(np.mean(population))
         pop_std = float(np.std(population, ddof=1))
         
-        tab_samp1, tab_samp2 = st.tabs(["Probability Sampling Methods", "Central Limit Theorem Simulation"])
+        tab_s1, tab_s2 = st.tabs([
+            "Probability Sampling Methods",
+            "Central Limit Theorem Simulation"
+        ])
         
-        with tab_samp1:
-            col_c1, col_c2 = st.columns(2)
-            with col_c1:
+        with tab_s1:
+            col_sc1, col_sc2 = st.columns(2)
+            with col_sc1:
                 n_sample = st.slider("Sample Size (n)", 10, min(150, N // 2), 30, 5)
-            with col_c2:
+            with col_sc2:
                 seed = st.number_input("Random Seed", 1, 9999, 42)
                 
-            # 1. SRS
+            # 1. Simple Random Sampling (SRS)
             srs = stock_return_series.sample(n=n_sample, random_state=seed)
-            # 2. Systematic
+            # 2. Systematic Sampling (1-in-k)
             k = max(1, N // n_sample)
             syst = stock_return_series.iloc[::k].head(n_sample)
             # 3. Stratified by Year
             df_yr = stock_return_series.rename("Return").to_frame()
             df_yr["Year"] = df_yr.index.year
             quota = max(1, int(np.ceil(n_sample / df_yr["Year"].nunique())))
-            strat = (df_yr.groupby("Year", group_keys=False).apply(lambda g: g.sample(min(len(g), quota), random_state=seed)))["Return"].head(n_sample)
+            strat = (df_yr.groupby("Year", group_keys=False).apply(
+                lambda g: g.sample(min(len(g), quota), random_state=seed)
+            ))["Return"].head(n_sample)
             
             samp_df = pd.DataFrame([
-                {"Method": "Full Population (Ground Truth)", "Sample Size (n)": N, "Mean (%)": f"{pop_mean:.4f}%", "Std Dev (%)": f"{pop_std:.4f}%", "Difference from μ": "0.0000%"},
-                {"Method": "Simple Random Sampling (SRS)", "Sample Size (n)": len(srs), "Mean (%)": f"{srs.mean():.4f}%", "Std Dev (%)": f"{srs.std(ddof=1):.4f}%", "Difference from μ": f"{abs(srs.mean()-pop_mean):.4f}%"},
-                {"Method": f"Systematic Sampling (k={k})", "Sample Size (n)": len(syst), "Mean (%)": f"{syst.mean():.4f}%", "Std Dev (%)": f"{syst.std(ddof=1):.4f}%", "Difference from μ": f"{abs(syst.mean()-pop_mean):.4f}%"},
-                {"Method": "Stratified Sampling (by Year)", "Sample Size (n)": len(strat), "Mean (%)": f"{strat.mean():.4f}%", "Std Dev (%)": f"{strat.std(ddof=1):.4f}%", "Difference from μ": f"{abs(strat.mean()-pop_mean):.4f}%"}
+                {"Sampling Method": "Full Population (Ground Truth)", "Sample Size (n)": N, "Mean Return (%)": f"{pop_mean:.4f}%", "Std Dev (%)": f"{pop_std:.4f}%", "Error from μ": "0.0000%"},
+                {"Sampling Method": "Simple Random Sampling (SRS)", "Sample Size (n)": len(srs), "Mean Return (%)": f"{srs.mean():.4f}%", "Std Dev (%)": f"{srs.std(ddof=1):.4f}%", "Error from μ": f"{abs(srs.mean()-pop_mean):.4f}%"},
+                {"Sampling Method": f"Systematic Sampling (k={k})", "Sample Size (n)": len(syst), "Mean Return (%)": f"{syst.mean():.4f}%", "Std Dev (%)": f"{syst.std(ddof=1):.4f}%", "Error from μ": f"{abs(syst.mean()-pop_mean):.4f}%"},
+                {"Sampling Method": "Stratified Sampling (by Year)", "Sample Size (n)": len(strat), "Mean Return (%)": f"{strat.mean():.4f}%", "Std Dev (%)": f"{strat.std(ddof=1):.4f}%", "Error from μ": f"{abs(strat.mean()-pop_mean):.4f}%"}
             ])
+            st.markdown("### Sampling Method Comparison against Ground Truth")
             st.dataframe(samp_df, hide_index=True, use_container_width=True)
+            st.caption("Each sampling scheme yields an unbiased estimator of the true population mean return, with stratified sampling reducing variance across multi-year macroeconomic regimes.")
             
-        with tab_samp2:
+        with tab_s2:
             st.markdown("### Interactive Simulation of the Central Limit Theorem")
-            st.caption("As sample size (n) increases, the distribution of sample averages approaches a normal distribution with standard error σ/√n.")
+            st.caption("As sample size (n) increases, the distribution of sample averages approaches a normal distribution with standard error σ/√n regardless of population skewness.")
             
-            col_clt1, col_clt2 = st.columns(2)
-            with col_clt1:
-                clt_n = st.select_slider("Sample Size (n)", options=[5, 15, 30, 50, 100], value=30)
-            with col_clt2:
-                clt_runs = st.select_slider("Simulation Draws (M)", options=[500, 1000, 2000], value=1000)
+            col_cl1, col_cl2 = st.columns(2)
+            with col_cl1:
+                clt_n = st.select_slider("Sample Size (n per draw)", options=[5, 15, 30, 50, 100], value=30)
+            with col_cl2:
+                clt_runs = st.select_slider("Monte Carlo Simulation Draws (M)", options=[500, 1000, 2000], value=1000)
                 
             np.random.seed(42)
             sample_means = np.array([
@@ -1111,18 +1648,19 @@ elif nav_selection == "Sampling & CLT":
             with r1:
                 st.metric("Population Mean (μ)", f"{pop_mean:.4f}%")
             with r2:
-                st.metric("Mean of Sample Means", f"{mean_of_means:.4f}%", f"{mean_of_means - pop_mean:+.4f}%")
+                st.metric("Simulated Mean of Means", f"{mean_of_means:.4f}%", f"{mean_of_means - pop_mean:+.4f}%")
             with r3:
-                st.metric("Theoretical Standard Error", f"{theoretical_se:.4f}%", f"Observed: {empirical_se:.4f}%")
+                st.metric("Theoretical Standard Error (σ/√n)", f"{theoretical_se:.4f}%", f"Observed SE: {empirical_se:.4f}%")
                 
             fig_clt = go.Figure()
             fig_clt.add_trace(go.Histogram(
                 x=sample_means,
                 histnorm='probability density',
                 nbinsx=40,
-                name="Simulated Means",
-                marker_color='#3563E9',
-                opacity=0.65
+                name="Simulated Sample Means",
+                marker_color='#315CEB',
+                opacity=0.65,
+                hovertemplate="Sample Mean: %{x:.4f}%<br>Density: %{y:.2f}<extra></extra>"
             ))
             
             x_vals = np.linspace(sample_means.min(), sample_means.max(), 150)
@@ -1131,18 +1669,23 @@ elif nav_selection == "Sampling & CLT":
                 x=x_vals,
                 y=clt_pdf,
                 mode='lines',
-                name="Theoretical Normal Curve N(μ, σ/√n)",
-                line=dict(color='#F59E0B', width=2.2)
+                name=f"Theoretical Normal N(μ, σ/√n)",
+                line=dict(color='#F59E0B', width=2.2),
+                hovertemplate="Mean: %{x:.4f}%<br>Normal Curve: %{y:.2f}<extra></extra>"
             ))
-            fig_clt.add_vline(x=pop_mean, line_dash="dash", line_color="#EF4444", annotation_text="μ")
+            fig_clt.add_vline(x=pop_mean, line_dash="dash", line_color="#D94F59", annotation_text="μ (Pop Mean)", annotation_position="top right")
             
             fig_clt.update_layout(create_clean_layout(
                 title=f"Sampling Distribution of Mean Daily Returns (n={clt_n}, M={clt_runs} draws)",
                 xaxis_title="Sample Mean (%)",
-                yaxis_title="Density",
-                height=380
+                yaxis_title="Probability Density",
+                height=390
             ))
             st.plotly_chart(fig_clt, use_container_width=True)
+            st.caption(
+                f"Plain English Takeaway: Even though individual daily returns for {selected_stock} feature extreme shocks and heavy tails, "
+                f"the average of {clt_n} randomly chosen sessions behaves in near-perfect accordance with Gaussian distribution theory."
+            )
 
 
 # ==========================================
@@ -1152,14 +1695,19 @@ elif nav_selection == "Hypothesis Testing":
     st.markdown("""
     <div class="page-header">
         <div class="page-title">Hypothesis Testing</div>
-        <div class="page-desc">Test whether the observed results provide enough evidence to support a conclusion.</div>
+        <div class="page-desc">Test statistical hypotheses regarding expected returns, asset equality, and market directional symmetry.</div>
     </div>
     """, unsafe_allow_html=True)
     
     if stock_return_series.empty:
-        st.warning("Insufficient data available.")
+        st.warning("Insufficient data available for hypothesis testing.")
     else:
-        tab_h1, tab_h2, tab_h3, tab_h4 = st.tabs(["One-Sample & Z Tests", "Confidence Intervals", "Two-Sample & Paired Tests", "Chi-Square Tests"])
+        tab_h1, tab_h2, tab_h3, tab_h4 = st.tabs([
+            "One-Sample & Z Tests",
+            "Confidence Intervals",
+            "Two-Sample & Paired Tests",
+            "Chi-Square Tests"
+        ])
         
         n_obs = len(stock_return_series)
         x_bar = float(stock_return_series.mean())
@@ -1178,34 +1726,73 @@ elif nav_selection == "Hypothesis Testing":
             
             col_th1, col_th2 = st.columns(2)
             with col_th1:
-                t_concl = "Reject H0 (Statistically Significant)" if t_pval < alpha else "Fail to Reject H0 (Insignificant)"
+                t_is_sig = t_pval < alpha
+                t_concl = "Reject H0 (Statistically Significant)" if t_is_sig else "Fail to Reject H0 (Insignificant)"
+                t_badge = "badge-pos" if t_is_sig else "badge-neutral"
                 st.markdown(f"""
                 <div class="content-card">
                     <div class="card-title">One-Sample Student's t-Test</div>
-                    <div style="font-size: 0.9rem; line-height: 1.8;">
-                        <strong>t-Statistic:</strong> {t_stat:.4f}<br>
-                        <strong>Degrees of Freedom:</strong> {n_obs - 1}<br>
-                        <strong>p-Value:</strong> {t_pval:.5f}<br>
-                        <strong>Decision (α={alpha}):</strong> <span class="{'badge-pos' if t_pval < alpha else 'badge-neutral'}">{t_concl}</span>
+                    <div style="font-size: 0.88rem; line-height: 1.85;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Null Hypothesis (H0):</span>
+                            <strong>μ = 0.0%</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">t-Statistic:</span>
+                            <strong>{t_stat:.4f}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Degrees of Freedom:</span>
+                            <strong>{n_obs - 1}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Two-Sided p-Value:</span>
+                            <strong>{t_pval:.5f}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                            <span style="color: #69778C;">Decision (α={alpha}):</span>
+                            <span class="{t_badge}">{t_concl}</span>
+                        </div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
                 
             with col_th2:
-                z_concl = "Reject H0" if z_pval < alpha else "Fail to Reject H0"
+                z_is_sig = z_pval < alpha
+                z_concl = "Reject H0 (Statistically Significant)" if z_is_sig else "Fail to Reject H0"
+                z_badge = "badge-pos" if z_is_sig else "badge-neutral"
                 st.markdown(f"""
                 <div class="content-card">
-                    <div class="card-title">Large-Sample Z Approximation</div>
-                    <div style="font-size: 0.9rem; line-height: 1.8;">
-                        <strong>z-Statistic:</strong> {z_stat:.4f}<br>
-                        <strong>Sample Size (n):</strong> {n_obs:,}<br>
-                        <strong>Asymptotic p-Value:</strong> {z_pval:.5f}<br>
-                        <strong>Decision (α={alpha}):</strong> <span class="{'badge-pos' if z_pval < alpha else 'badge-neutral'}">{z_concl}</span>
+                    <div class="card-title">Large-Sample Z-Test Approximation</div>
+                    <div style="font-size: 0.88rem; line-height: 1.85;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Null Hypothesis (H0):</span>
+                            <strong>μ = 0.0%</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">z-Statistic:</span>
+                            <strong>{z_stat:.4f}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Sample Size (n):</span>
+                            <strong>{n_obs:,}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Asymptotic p-Value:</span>
+                            <strong>{z_pval:.5f}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                            <span style="color: #69778C;">Decision (α={alpha}):</span>
+                            <span class="{z_badge}">{z_concl}</span>
+                        </div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
                 
-            st.caption("Justification: When sample sizes exceed 1,000 observations, the Central Limit Theorem ensures that the sample mean distribution is asymptotically normal.")
+            st.caption(
+                "Methodological Note: With sample sizes exceeding 1,000 sessions, the t and z distributions converge identically. "
+                "Failing to reject H0 does not prove that expected returns are exactly zero; it demonstrates that observed drift is within normal sampling error."
+            )
             
         with tab_h2:
             st.markdown("### Two-Sided Confidence Intervals for Mean Daily Return")
@@ -1214,13 +1801,16 @@ elif nav_selection == "Hypothesis Testing":
                 a = 1 - conf
                 t_crit = stats.t.ppf(1 - a / 2, df=n_obs - 1)
                 moe = t_crit * se
+                low_b = x_bar - moe
+                up_b = x_bar + moe
+                contains_zero = low_b <= 0 <= up_b
                 ci_rows.append({
                     "Confidence Level": f"{int(conf*100)}%",
                     "Critical Value (t*)": round(t_crit, 4),
                     "Margin of Error": f"±{moe:.4f}%",
-                    "Lower Bound": f"{x_bar - moe:+.4f}%",
-                    "Upper Bound": f"{x_bar + moe:+.4f}%",
-                    "Contains Zero?": "Yes" if (x_bar - moe) <= 0 <= (x_bar + moe) else "No"
+                    "Lower Bound": f"{low_b:+.4f}%",
+                    "Upper Bound": f"{up_b:+.4f}%",
+                    "Contains Zero (μ=0)?": "Yes (Consistent with 0)" if contains_zero else "No (Statistically Distinct)"
                 })
             st.dataframe(pd.DataFrame(ci_rows), hide_index=True, use_container_width=True)
             
@@ -1239,24 +1829,53 @@ elif nav_selection == "Hypothesis Testing":
                 
                 c_w1, c_w2 = st.columns(2)
                 with c_w1:
+                    w_sig = welch.pvalue < 0.05
                     st.markdown(f"""
                     <div class="content-card">
                         <div class="card-title">Welch's Two-Sample t-Test</div>
-                        <div style="font-size: 0.9rem; line-height: 1.8;">
-                            <strong>t-Statistic:</strong> {welch.statistic:.4f}<br>
-                            <strong>p-Value:</strong> {welch.pvalue:.5f}<br>
-                            <strong>Result:</strong> {'Difference is statistically significant' if welch.pvalue < 0.05 else 'No significant difference in average return'}
+                        <div style="font-size: 0.88rem; line-height: 1.85;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                                <span style="color: #69778C;">H0:</span>
+                                <strong>μ({selected_stock}) = μ({comp_stock})</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                                <span style="color: #69778C;">t-Statistic:</span>
+                                <strong>{welch.statistic:.4f}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                                <span style="color: #69778C;">p-Value:</span>
+                                <strong>{welch.pvalue:.5f}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                                <span style="color: #69778C;">Conclusion (α=0.05):</span>
+                                <span class="{'badge-pos' if w_sig else 'badge-neutral'}">{'Statistically Significant Difference' if w_sig else 'No Significant Difference'}</span>
+                            </div>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
                 with c_w2:
+                    p_sig = rel.pvalue < 0.05
                     st.markdown(f"""
                     <div class="content-card">
-                        <div class="card-title">Paired t-Test (Matching Trading Days)</div>
-                        <div style="font-size: 0.9rem; line-height: 1.8;">
-                            <strong>t-Statistic:</strong> {rel.statistic:.4f}<br>
-                            <strong>p-Value:</strong> {rel.pvalue:.5f}<br>
-                            <strong>Synchronous Sessions:</strong> {len(paired):,}
+                        <div class="card-title">Paired t-Test (Synchronous Trading Sessions)</div>
+                        <div style="font-size: 0.88rem; line-height: 1.85;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                                <span style="color: #69778C;">H0:</span>
+                                <strong>Mean Daily Difference = 0</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                                <span style="color: #69778C;">t-Statistic:</span>
+                                <strong>{rel.statistic:.4f}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                                <span style="color: #69778C;">p-Value:</span>
+                                <strong>{rel.pvalue:.5f}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                                <span style="color: #69778C;">Synchronous Days:</span>
+                                <strong>{len(paired):,}</strong>
+                            </div>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
@@ -1279,30 +1898,57 @@ elif nav_selection == "Hypothesis Testing":
             
             col_ch1, col_ch2 = st.columns(2)
             with col_ch1:
+                gof_sig = p_gof < 0.05
                 st.markdown(f"""
                 <div class="content-card">
-                    <div class="card-title">Direction Goodness-of-Fit Test</div>
-                    <div style="font-size: 0.88rem; line-height: 1.7;">
-                        H0: Equal 50/50 probability of positive vs. non-positive days.<br>
-                        <strong>Positive Days:</strong> {pos_days} ({pos_days/n_obs*100:.1f}%)<br>
-                        <strong>Non-Positive Days:</strong> {non_pos_days} ({non_pos_days/n_obs*100:.1f}%)<br>
-                        <strong>Chi² Statistic:</strong> {chi2_gof:.4f}<br>
-                        <strong>p-Value:</strong> {p_gof:.5f}<br>
-                        <strong>Result:</strong> {'Evidence of directional bias' if p_gof < 0.05 else 'Consistent with symmetric 50/50 chance'}
+                    <div class="card-title">Directional Goodness-of-Fit Test</div>
+                    <div style="font-size: 0.88rem; line-height: 1.85;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Null Hypothesis (H0):</span>
+                            <strong>P(Up) = P(Down) = 0.50</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Positive Sessions:</span>
+                            <strong>{pos_days} ({pos_days/n_obs*100:.1f}%)</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Chi² Statistic:</span>
+                            <strong>{chi2_gof:.4f}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">p-Value:</span>
+                            <strong>{p_gof:.5f}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                            <span style="color: #69778C;">Result (α=0.05):</span>
+                            <span class="{'badge-pos' if gof_sig else 'badge-neutral'}">{'Statistically Significant Up Bias' if gof_sig else 'Consistent with 50/50 Chance'}</span>
+                        </div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
                 
             with col_ch2:
+                w_is_sig = p_w < 0.05
                 st.markdown(f"""
                 <div class="content-card">
-                    <div class="card-title">Weekday Independence Test (Calendar Anomaly)</div>
-                    <div style="font-size: 0.88rem; line-height: 1.7;">
-                        H0: Return direction is independent of the day of the week.<br>
-                        <strong>Chi² Statistic:</strong> {chi2_w:.4f}<br>
-                        <strong>Degrees of Freedom:</strong> {dof_w}<br>
-                        <strong>p-Value:</strong> {p_w:.5f}<br>
-                        <strong>Result:</strong> {'Day-of-the-week pattern detected' if p_w < 0.05 else 'No statistically significant weekday effect'}
+                    <div class="card-title">Weekday Independence (Calendar Anomaly)</div>
+                    <div style="font-size: 0.88rem; line-height: 1.85;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Null Hypothesis (H0):</span>
+                            <strong>Direction is independent of weekday</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Chi² Statistic (df={dof_w}):</span>
+                            <strong>{chi2_w:.4f}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">p-Value:</span>
+                            <strong>{p_w:.5f}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                            <span style="color: #69778C;">Result (α=0.05):</span>
+                            <span class="{'badge-pos' if w_is_sig else 'badge-neutral'}">{'Weekday Anomaly Detected' if w_is_sig else 'No Weekday Effect'}</span>
+                        </div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -1318,7 +1964,7 @@ elif nav_selection == "Correlation Analysis":
     st.markdown("""
     <div class="page-header">
         <div class="page-title">Correlation Analysis</div>
-        <div class="page-desc">Explore how stock returns move together.</div>
+        <div class="page-desc">Measure linear co-movement, rank associations, and systematic market risk (Beta).</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1328,9 +1974,13 @@ elif nav_selection == "Correlation Analysis":
     df_corr = active_returns[corr_cols].dropna()
     
     if df_corr.empty or len(corr_cols) < 2:
-        st.warning("Insufficient multi-asset data.")
+        st.warning("Insufficient multi-asset data available for correlation analysis.")
     else:
-        tab_cr1, tab_cr2, tab_cr3 = st.tabs(["Correlation Matrices", "Stock vs. Benchmark Scatter (Beta)", "Pairwise Stock Scatter"])
+        tab_cr1, tab_cr2, tab_cr3 = st.tabs([
+            "Correlation Matrices",
+            "Stock vs. Benchmark Scatter (Beta)",
+            "Pairwise Stock Scatter"
+        ])
         
         with tab_cr1:
             m_type = st.radio("Metric", ["Pearson Correlation (Linear)", "Spearman Correlation (Rank)", "Covariance"], horizontal=True)
@@ -1338,29 +1988,38 @@ elif nav_selection == "Correlation Analysis":
             if "Pearson" in m_type:
                 mat = df_corr.corr(method="pearson")
                 c_title = "Pearson Linear Correlation Matrix"
+                zmin, zmax = -1.0, 1.0
+                # Diverging scale centered at 0: Negative #D94F59, Zero #FFFFFF, Positive #315CEB
+                cscale = [[0.0, "#D94F59"], [0.5, "#FFFFFF"], [1.0, "#315CEB"]]
             elif "Spearman" in m_type:
                 mat = df_corr.corr(method="spearman")
-                c_title = "Spearman Rank Correlation Matrix"
+                c_title = "Spearman Monotonic Rank Correlation Matrix"
+                zmin, zmax = -1.0, 1.0
+                cscale = [[0.0, "#D94F59"], [0.5, "#FFFFFF"], [1.0, "#315CEB"]]
             else:
                 mat = df_corr.cov()
-                c_title = "Covariance Matrix"
+                c_title = "Empirical Covariance Matrix (%²)"
+                zmin, zmax = None, None
+                cscale = "Blues"
                 
             fig_hm = go.Figure(data=go.Heatmap(
                 z=mat.values,
                 x=mat.columns,
                 y=mat.index,
-                colorscale="Blues",
-                zmin=-1 if "Covariance" not in m_type else None,
-                zmax=1 if "Covariance" not in m_type else None,
+                colorscale=cscale,
+                zmin=zmin,
+                zmax=zmax,
                 text=np.round(mat.values, 3),
                 texttemplate="%{text}",
-                textfont=dict(size=11, family="Inter, sans-serif")
+                textfont=dict(size=11, family="Inter, sans-serif"),
+                hovertemplate="<b>%{x} vs. %{y}</b><br>Value: %{z:.4f}<extra></extra>"
             ))
             fig_hm.update_layout(create_clean_layout(
                 title=c_title,
                 height=420
             ))
             st.plotly_chart(fig_hm, use_container_width=True)
+            st.caption("Diverging color gradient: blue indicates positive co-movement, red indicates inverse diversification, and white indicates near-zero correlation.")
             
         with tab_cr2:
             if BENCHMARK not in active_returns.columns:
@@ -1374,11 +2033,11 @@ elif nav_selection == "Correlation Analysis":
                 
                 col_b1, col_b2, col_b3 = st.columns(3)
                 with col_b1:
-                    st.metric("Beta (β - Systematic Risk)", f"{slope:.3f}", help="Sensitivity to broader market movements.")
+                    st.metric("Beta (β - Systematic Risk)", f"{slope:.3f}", help="Sensitivity to broader S&P 500 market movements.")
                 with col_b2:
-                    st.metric("Alpha (α - Daily)", f"{intercept:+.4f}%", help="Intercept term.")
+                    st.metric("Alpha (α - Daily Intercept)", f"{intercept:+.4f}%", help="Unsystematic daily excess return.")
                 with col_b3:
-                    st.metric("R² (Variance Explained)", f"{r_val**2:.3f}", f"Correlation: {r_val:.3f}")
+                    st.metric("R² (Variance Explained)", f"{r_val**2:.3f}", f"Correlation (r): {r_val:.3f}")
                     
                 fig_sc = go.Figure()
                 fig_sc.add_trace(go.Scatter(
@@ -1386,7 +2045,8 @@ elif nav_selection == "Correlation Analysis":
                     y=y_val,
                     mode='markers',
                     name="Daily Sessions",
-                    marker=dict(color='#3563E9', size=5, opacity=0.45)
+                    marker=dict(color='#315CEB', size=5, opacity=0.45),
+                    hovertemplate="S&P 500: %{x:.2f}%<br>" + f"{selected_stock}: " + "%{y:.2f}%<extra></extra>"
                 ))
                 
                 x_line = np.linspace(x_val.min(), x_val.max(), 100)
@@ -1394,15 +2054,18 @@ elif nav_selection == "Correlation Analysis":
                     x=x_line,
                     y=intercept + slope * x_line,
                     mode='lines',
-                    name=f"OLS Regression (β={slope:.2f})",
-                    line=dict(color='#F59E0B', width=2)
+                    name=f"OLS Line (β={slope:.2f}, R²={r_val**2:.2f})",
+                    line=dict(color='#F59E0B', width=2.2)
                 ))
                 
+                fig_sc.add_hline(y=0, line_color="#E6EAF1", line_width=1)
+                fig_sc.add_vline(x=0, line_color="#E6EAF1", line_width=1)
+                
                 fig_sc.update_layout(create_clean_layout(
-                    title=f"{selected_stock} vs. S&P 500 Daily Return Scatter & OLS Line",
+                    title=f"{selected_stock} vs. S&P 500 Benchmark Return Scatter & OLS Fit",
                     xaxis_title="S&P 500 Daily Return (%)",
                     yaxis_title=f"{selected_stock} Daily Return (%)",
-                    height=400
+                    height=410
                 ))
                 st.plotly_chart(fig_sc, use_container_width=True)
                 
@@ -1417,13 +2080,18 @@ elif nav_selection == "Correlation Analysis":
                     x=pair_data[pair_target],
                     y=pair_data[selected_stock],
                     mode='markers',
-                    marker=dict(color='#3563E9', size=5, opacity=0.45)
+                    marker=dict(color='#315CEB', size=5, opacity=0.45),
+                    hovertemplate=f"{pair_target}: " + "%{x:.2f}%<br>" + f"{selected_stock}: " + "%{y:.2f}%<extra></extra>"
                 ))
+                fig_p.add_hline(y=0, line_color="#E6EAF1", line_width=1)
+                fig_p.add_vline(x=0, line_color="#E6EAF1", line_width=1)
+                
                 fig_p.update_layout(create_clean_layout(
-                    title=f"Return Scatter: {selected_stock} vs. {pair_target} (r = {pr_r:.3f}, p = {pr_p:.1e})",
+                    title=f"Pairwise Scatter: {selected_stock} vs. {pair_target} (r = {pr_r:.3f}, p = {pr_p:.1e})",
                     xaxis_title=f"{pair_target} Daily Return (%)",
                     yaxis_title=f"{selected_stock} Daily Return (%)",
-                    height=380
+                    height=380,
+                    show_legend=False
                 ))
                 st.plotly_chart(fig_p, use_container_width=True)
 
@@ -1435,7 +2103,7 @@ elif nav_selection == "Model Performance":
     st.markdown("""
     <div class="page-header">
         <div class="page-title">Model Performance</div>
-        <div class="page-desc">Compare the performance of the trained prediction models.</div>
+        <div class="page-desc">Review out-of-sample historical evaluation benchmarks across trained predictive algorithms.</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1443,37 +2111,64 @@ elif nav_selection == "Model Performance":
     df_clf = data_dict.get("classification_comparison")
     df_cm = data_dict.get("confusion_matrix")
     
-    tab_mp1, tab_mp2, tab_mp3 = st.tabs(["Regression Models", "Classification Models", "Holdout Confusion Matrix"])
+    tab_mp1, tab_mp2, tab_mp3 = st.tabs([
+        "Regression Models",
+        "Classification Models",
+        "Holdout Confusion Matrix"
+    ])
     
     with tab_mp1:
         if df_reg is not None:
             st.markdown("### Next-Day Return Regression Leaderboard")
-            st.caption("Target: Next-day percentage return. Evaluated on chronological 20% holdout test set:")
+            st.caption("Target: Next-day percentage return. Evaluated on a chronological 20% holdout test set (unseen future sessions):")
             st.dataframe(df_reg.round(4), hide_index=True, use_container_width=True)
             
             fig_reg = go.Figure()
-            fig_reg.add_trace(go.Bar(x=df_reg["Model"], y=df_reg["RMSE"], name="RMSE", marker_color='#3563E9'))
-            fig_reg.add_trace(go.Bar(x=df_reg["Model"], y=df_reg["MAE"], name="MAE", marker_color='#94A3B8'))
+            fig_reg.add_trace(go.Bar(
+                x=df_reg["Model"],
+                y=df_reg["RMSE"],
+                name="RMSE (% - Root Mean Squared Error)",
+                marker_color='#315CEB'
+            ))
+            fig_reg.add_trace(go.Bar(
+                x=df_reg["Model"],
+                y=df_reg["MAE"],
+                name="MAE (% - Mean Absolute Error)",
+                marker_color='#69778C'
+            ))
             fig_reg.update_layout(create_clean_layout(
-                title="Model Error Metrics (Lower is Better)",
+                title="Regression Model Error Comparison (Lower is Better)",
                 xaxis_title="Model",
                 yaxis_title="Error (%)",
                 height=350
             ))
             st.plotly_chart(fig_reg, use_container_width=True)
             
-            with st.expander("Why are R² scores close to zero?"):
-                st.caption("Consistent with the Efficient Market Hypothesis, short-term daily asset returns exhibit low signal-to-noise ratios. Linear models capture aggregate trends, but next-day percentage returns cannot be predicted with high precision from simple historical lags.")
+            with st.expander("Academic Note: Why are regression R² scores near zero?"):
+                st.caption(
+                    "In line with the Efficient Market Hypothesis (EMH), short-term daily financial returns exhibit very low signal-to-noise ratios. "
+                    "While simple historical lags capture broad drift, predicting exact daily returns with high R² is inherently constrained by market efficiency."
+                )
                 
     with tab_mp2:
         if df_clf is not None:
             st.markdown("### Market Direction Classification Leaderboard")
-            st.caption("Target: Next-day return > 0 (1 = Up, 0 = Flat/Down). Evaluated on 20% holdout test set:")
+            st.caption("Target: Next-day return direction (1 = Positive/Up, 0 = Non-positive/Down). Evaluated on 20% chronological holdout:")
             st.dataframe(df_clf.round(4), hide_index=True, use_container_width=True)
             
             fig_clf = go.Figure()
-            fig_clf.add_trace(go.Bar(x=df_clf["Model"], y=df_clf["Accuracy"], name="Accuracy", marker_color='#3563E9'))
-            fig_clf.add_trace(go.Bar(x=df_clf["Model"], y=df_clf["F1-Score"], name="F1-Score", marker_color='#10B981'))
+            fig_clf.add_trace(go.Bar(
+                x=df_clf["Model"],
+                y=df_clf["Accuracy"],
+                name="Accuracy",
+                marker_color='#315CEB'
+            ))
+            fig_clf.add_trace(go.Bar(
+                x=df_clf["Model"],
+                y=df_clf["F1-Score"],
+                name="F1-Score",
+                marker_color='#16856B'
+            ))
             fig_clf.update_layout(create_clean_layout(
                 title="Classification Performance Metrics Comparison",
                 xaxis_title="Model",
@@ -1497,7 +2192,8 @@ elif nav_selection == "Model Performance":
                 ))
                 fig_cmat.update_layout(create_clean_layout(
                     title="Test Set Confusion Matrix (Logistic Regression)",
-                    height=340
+                    height=340,
+                    show_legend=False
                 ))
                 st.plotly_chart(fig_cmat, use_container_width=True)
                 
@@ -1508,21 +2204,48 @@ elif nav_selection == "Model Performance":
                 tp = df_cm.iloc[1, 1]
                 tot = tn + fp + fn + tp
                 
+                acc = (tn + tp) / tot * 100
+                prec = tp / (tp + fp) * 100 if (tp + fp) > 0 else 0
+                rec = tp / (tp + fn) * 100 if (tp + fn) > 0 else 0
+                
                 st.markdown(f"""
                 <div class="content-card">
                     <div class="card-title">Diagnostic Breakdown</div>
-                    <div style="font-size: 0.88rem; line-height: 1.8;">
-                        • <strong>Test Observations:</strong> {tot} sessions (chronological holdout)<br>
-                        • <strong>True Negatives:</strong> {tn} (Correctly classified down days)<br>
-                        • <strong>False Positives:</strong> {fp} (Type I error)<br>
-                        • <strong>False Negatives:</strong> {fn} (Type II error)<br>
-                        • <strong>True Positives:</strong> {tp} (Correctly classified up days)<br>
-                        • <strong>Accuracy:</strong> {(tn+tp)/tot*100:.2f}%<br>
-                        • <strong>Precision:</strong> {tp/(tp+fp)*100:.2f}%<br>
-                        • <strong>Sensitivity (Recall):</strong> {tp/(tp+fn)*100:.2f}%
+                    <div style="font-size: 0.88rem; line-height: 1.85;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">Chronological Holdout Sessions:</span>
+                            <strong>{tot} sessions</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">True Negatives (Correct Down):</span>
+                            <strong>{tn}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">False Positives (Type I Error):</span>
+                            <strong>{fp}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">False Negatives (Type II Error):</span>
+                            <strong>{fn}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #F1F4F9; padding: 4px 0;">
+                            <span style="color: #69778C;">True Positives (Correct Up):</span>
+                            <strong>{tp}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                            <span style="color: #69778C;">Overall Test Accuracy:</span>
+                            <strong style="color: #315CEB;">{acc:.2f}%</strong>
+                        </div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+                
+    st.markdown("""
+    <div class="disclaimer-card" style="margin-top: 16px;">
+        <strong>Historical Evaluation Disclaimer:</strong> These metrics reflect backtested evaluation on historical holdout partitions. 
+        Past predictive performance does not guarantee future financial accuracy.
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -1532,7 +2255,7 @@ elif nav_selection == "Predictions":
     st.markdown("""
     <div class="page-header">
         <div class="page-title">Predictions</div>
-        <div class="page-desc">Explore the estimates produced by the saved models.</div>
+        <div class="page-desc">Generate statistical next-day return estimates and directional probabilities via trained Scikit-Learn pipelines.</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1549,17 +2272,17 @@ elif nav_selection == "Predictions":
             'Benchmark_Return'
         ]
         
-        st.markdown(f"""
+        st.markdown("""
         <div class="content-card" style="padding: 14px 18px; margin-bottom: 16px;">
-            <div style="font-size: 0.88rem; color: #475569;">
-                <strong>Pipeline Configuration:</strong> The saved models (<strong>Lasso Regression</strong> and <strong>Logistic Regression</strong>) 
-                were trained on <strong>Apple (AAPL)</strong> historical features with S&P 500 benchmark inputs across 8 technical dimensions: 
-                <code>Return_Lag1, Return_Lag2, Return_Lag5, Volatility_5D, Volatility_20D, Moving_Average_5D, Moving_Average_20D, Benchmark_Return</code>.
+            <div style="font-size: 0.88rem; color: #475569; line-height: 1.55;">
+                <strong>Pipeline Configuration:</strong> The deployed models (<strong>Lasso Regression</strong> and <strong>Logistic Regression</strong>) 
+                were trained using <strong>Apple (AAPL)</strong> historical features and S&P 500 benchmark data across 8 technical dimensions: 
+                <code style="color: #315CEB; font-size: 0.82rem;">Return_Lag1, Return_Lag2, Return_Lag5, Volatility_5D, Volatility_20D, Moving_Average_5D, Moving_Average_20D, Benchmark_Return</code>.
             </div>
         </div>
         """, unsafe_allow_html=True)
         
-        p_mode = st.radio("Inference Input Source:", ["Latest Historical Features (Real Data)", "Custom Scenario Simulator"], horizontal=True)
+        p_mode = st.radio("Inference Input Source:", ["Latest Historical Features (Real Observed Data)", "Custom Scenario Simulator"], horizontal=True)
         
         feat_df = None
         ref_date = "Custom"
@@ -1587,11 +2310,11 @@ elif nav_selection == "Predictions":
                     ref_date = temp.index[-1].strftime('%b %d, %Y')
                     
             if feat_df is not None:
-                st.markdown(f"#### Active Feature Values as of {ref_date}")
+                st.markdown(f"#### Active Feature Vector as of {ref_date}")
                 st.dataframe(feat_df.round(4), hide_index=True, use_container_width=True)
                 
         else:
-            st.markdown("#### Adjust Market Parameters")
+            st.markdown("#### Adjust Market Parameters for Scenario Inference")
             c_p1, c_p2, c_p3, c_p4 = st.columns(4)
             with c_p1:
                 f_l1 = st.slider("Return Lag 1 (%)", -8.0, 8.0, 0.5, 0.1)
@@ -1624,7 +2347,7 @@ elif nav_selection == "Predictions":
                 pred_probs = clf_model.predict_proba(feat_df)[0] if hasattr(clf_model, "predict_proba") else None
                 
                 st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
-                st.markdown("### Model Estimates")
+                st.markdown("### Model Prediction Outputs")
                 
                 col_o1, col_o2, col_o3 = st.columns(3)
                 with col_o1:
@@ -1633,7 +2356,7 @@ elif nav_selection == "Predictions":
                     st.markdown(f"""
                     <div class="metric-card">
                         <div class="metric-label">Estimated Next-Day Return</div>
-                        <div class="metric-value">{r_sign}{pred_ret:.4f}%</div>
+                        <div class="metric-value" style="color: {'#16856B' if pred_ret >= 0 else '#D94F59'};">{r_sign}{pred_ret:.4f}%</div>
                         <div class="metric-sub"><span class="{b_color}">Lasso Regression Model</span></div>
                     </div>
                     """, unsafe_allow_html=True)
@@ -1653,7 +2376,7 @@ elif nav_selection == "Predictions":
                     prob_str = f"{pred_probs[1]*100:.1f}% Up / {pred_probs[0]*100:.1f}% Down" if pred_probs is not None else "N/A"
                     st.markdown(f"""
                     <div class="metric-card">
-                        <div class="metric-label">Direction Confidence</div>
+                        <div class="metric-label">Directional Class Probabilities</div>
                         <div class="metric-value" style="font-size: 1.35rem;">{prob_str}</div>
                         <div class="metric-sub"><span class="badge-neutral">Probability Estimate</span></div>
                     </div>
@@ -1666,9 +2389,9 @@ elif nav_selection == "Predictions":
         st.markdown("""
         <div class="disclaimer-card">
             <strong>⚠️ Academic Disclaimer:</strong> These predictions are generated by statistical machine learning models 
-            trained on historical equity data solely for university coursework and demonstration purposes. 
-            Financial markets are non-stationary and subject to complex macroeconomic shocks. 
-            <strong>Under no circumstances should these estimates be construed as financial advice, investment recommendations, or trading signals.</strong>
+            trained on historical equity data solely for university research and quantitative demonstration. 
+            Financial markets are non-stationary and subject to unforeseen macroeconomic shocks. 
+            <strong>Under no circumstances should these estimates be construed as investment recommendations, financial advice, or trading signals.</strong>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1676,9 +2399,9 @@ elif nav_selection == "Predictions":
 # ==========================================
 # FOOTER
 # ==========================================
-st.markdown("<hr style='margin: 32px 0 16px 0; border: none; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
+st.markdown("<hr style='margin: 32px 0 16px 0; border: none; border-top: 1px solid #E6EAF1;'>", unsafe_allow_html=True)
 st.markdown("""
-<div style="text-align: center; color: #94A3B8; font-size: 0.8rem; padding-bottom: 12px;">
+<div style="text-align: center; color: #69778C; font-size: 0.8rem; padding-bottom: 12px;">
     <strong>Stock Market Return Statistical Analyzer</strong> • Academic Analytics Dashboard
 </div>
 """, unsafe_allow_html=True)
