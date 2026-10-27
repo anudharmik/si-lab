@@ -1,26 +1,26 @@
 # Stock Market Return Statistical Analyzer
 
-An interactive, high-performance financial analytics and statistical dashboard built with **Streamlit**, **Pandas**, **SciPy**, and **Scikit-Learn** for college research and quantitative market analysis.
+An interactive, modern light-mode financial analytics and statistical dashboard built with **Streamlit**, **Plotly**, **Pandas**, **SciPy**, and **Scikit-Learn** for university quantitative market research and academic presentations.
 
 ---
 
 ## 📌 Project Overview
 
-This dashboard analyzes 5-year daily adjusted closing price and percentage return series for mega-cap technology equities (**AAPL**, **MSFT**, **NVDA**, **AMZN**, **GOOGL**) alongside the **S&P 500 benchmark (`^GSPC`)**. It rigorously implements classical descriptive statistics, probability distributions, sampling theory (Central Limit Theorem), inferential hypothesis tests, correlation structures, and machine learning predictive pipelines.
+This dashboard analyzes 5-year daily adjusted closing price and percentage return series for mega-cap technology equities (**AAPL**, **MSFT**, **NVDA**, **AMZN**, **GOOGL**) alongside the **S&P 500 benchmark (`^GSPC`)**. It implements classical descriptive statistics, probability distributions, sampling theory (Central Limit Theorem), inferential hypothesis tests, correlation structures, and machine learning predictive pipelines in a clean, publication-ready light interface.
 
 ---
 
 ## 🚀 Key Dashboard Modules
 
-1. **Executive Overview:** High-level key performance indicators (KPIs), latest price levels, cumulative returns, daily volatility, Sharpe ratio, and max drawdowns.
-2. **Historical Analysis:** Interactive price trajectories, 20/50-day moving averages, cumulative wealth growth ($10,000 initial investment), daily return bar charts, and multi-asset normalized performance.
-3. **Descriptive Statistics:** Comprehensive statistical moments (mean, median, mode, variance, standard deviation, quartiles, IQR, skewness, and kurtosis) with detailed comparative tables.
-4. **Distribution & Density:** Return histograms, Kernel Density Estimation (KDE), theoretical Gaussian curves, box & violin plots, and empirical rule vs. Chebyshev bound validation.
-5. **Sampling & Probability (CLT):** Live demonstrations of Simple Random Sampling (SRS), Systematic Sampling, and Stratified Sampling by Year. Central Limit Theorem simulation showing convergence of sample means to normality.
-6. **Hypothesis Testing:** One-sample $t$-test ($H_0: \mu = 0$), large-sample $z$ approximation, confidence intervals (90%, 95%, 99%), Welch's two-sample independent $t$-test, paired $t$-test on synchronous trading dates, and Chi-Square tests (Goodness-of-Fit for direction & Independence for day-of-week calendar anomalies).
-7. **Correlation & Covariance:** Pearson linear correlation, Spearman monotonic rank correlation, covariance matrix, interactive heatmaps, and stock vs. benchmark scatter regression with beta ($\beta$) and alpha ($\alpha$).
-8. **Model Evaluation:** Real performance metrics loaded from historical evaluation datasets across 5 regression models (MAE, RMSE, $R^2$) and 3 classification models (Accuracy, Precision, Recall, F1-Score). Includes test-set confusion matrix and classification reports.
-9. **Predictive Inference:** Next-day return forecasting and market direction classification powered by trained Scikit-Learn pipelines (`Lasso Regression` and `Logistic Regression`) using 8 exact market features. Supports latest historical market data and custom scenario simulation.
+1. **Overview:** Executive KPIs (Closing Price, Cumulative Return, Daily Mean, Daily Volatility), normalized performance chart (Base = 100) vs. S&P 500, dynamic factual observations, and multi-asset risk snapshot.
+2. **Historical Trends:** Price action with 20-day and 50-day moving averages, growth of an initial $10,000 investment, and daily return fluctuations with rolling peak-to-trough drawdowns.
+3. **Statistics:** Classical statistical moments (mean, median, mode, variance, standard deviation, quartiles, IQR, skewness, and kurtosis) with cross-asset comparative tables.
+4. **Return Distribution:** Empirical return histogram with Kernel Density Estimation (KDE), theoretical Gaussian normal curve, outlier boxplots, and Empirical Rule vs. Chebyshev bound evaluation.
+5. **Sampling & CLT:** Live probability sampling demonstrations (Simple Random, Systematic, Stratified by Year) and an interactive Central Limit Theorem Monte Carlo simulation.
+6. **Hypothesis Testing:** One-sample $t$-test ($H_0: \mu = 0$), large-sample $z$ approximation, confidence intervals (90%, 95%, 99%), Welch's two-sample $t$-test, paired $t$-test on matching trading dates, and Chi-Square tests (Direction Goodness-of-Fit & Weekday Independence).
+7. **Correlation Analysis:** Pearson linear correlation, Spearman monotonic rank correlation, covariance matrix, interactive heatmaps, and stock vs. benchmark scatter regression with beta ($\beta$) and alpha ($\alpha$).
+8. **Model Performance:** Real performance metrics loaded from historical evaluation datasets across 5 regression models (MAE, RMSE, $R^2$) and 3 classification models (Accuracy, Precision, Recall, F1-Score), including the holdout test-set confusion matrix.
+9. **Predictions:** Next-day return forecasting and market direction classification powered by trained Scikit-Learn pipelines (`Lasso Regression` and `Logistic Regression`) using 8 exact technical features. Includes latest historical market data and custom scenario simulation.
 
 ---
 
